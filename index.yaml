@@ -1,9 +1,20 @@
 apiVersion: v1
 entries:
+  ssi-agent:
+  - apiVersion: v2
+    appVersion: 0.0.3
+    created: "2023-04-20T13:15:24.866052753Z"
+    description: A Helm chart for Kubernetes
+    digest: 718885e6bc66be43c38372f96e58262cbbd20d0ab8f845119395f777d3a479f5
+    name: ssi-agent
+    type: application
+    urls:
+    - https://catenax-ng.github.io/product-vcissuer/helm-charts/ssi-agent-0.0.3.tgz
+    version: 0.0.3
   vcissuer:
   - apiVersion: v2
     appVersion: 0.0.2
-    created: "2023-04-03T22:02:59.981103082Z"
+    created: "2023-04-20T13:15:24.867362667Z"
     description: A Helm chart for Kubernetes
     digest: fbae54eb7389589df07167c0aad605d63e18bba0acd7da4326434c6c9a967a85
     name: vcissuer
@@ -13,7 +24,7 @@ entries:
     version: 0.0.2
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2023-04-03T22:02:59.980535085Z"
+    created: "2023-04-20T13:15:24.86675596Z"
     description: A Helm chart for Kubernetes
     digest: 2e26c42c12cd448a28ff3ac7e562c5f806f348ba0172f0928d6ad7b84076e912
     name: vcissuer
@@ -21,4 +32,4 @@ entries:
     urls:
     - https://catenax-ng.github.io/product-vcissuer/helm-charts/vcissuer-0.0.1.tgz
     version: 0.0.1
-generated: "2023-04-03T22:02:59.979465692Z"
+generated: "2023-04-20T13:15:24.86384773Z"
