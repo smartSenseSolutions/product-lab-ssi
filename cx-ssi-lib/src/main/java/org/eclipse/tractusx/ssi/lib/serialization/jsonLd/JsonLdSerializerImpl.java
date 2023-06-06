@@ -31,7 +31,9 @@ public class JsonLdSerializerImpl implements JsonLdSerializer {
   public SerializedVerifiablePresentation serializePresentation(
       VerifiablePresentation verifiablePresentation) {
 
-    final String dtPresentationJson = verifiablePresentation.toJson();
+    final com.danubetech.verifiablecredentials.VerifiablePresentation dtPresentation =
+        DanubeTechMapper.map(verifiablePresentation);
+    final String dtPresentationJson = dtPresentation.toJson();
 
     return new SerializedVerifiablePresentation(dtPresentationJson);
   }
@@ -49,8 +51,7 @@ public class JsonLdSerializerImpl implements JsonLdSerializer {
 
     final String serializedPresentationJson = serializedPresentation.getJson();
 
-    final VerifiablePresentation presentation =
-        VerifiablePresentation.fromJson(serializedPresentationJson);
+    final VerifiablePresentation presentation = DanubeTechMapper.map(dtPresentation);
 
     if (validateJsonLd) {
       JsonLdValidator jsonLdValidator = new JsonLdValidatorImpl();

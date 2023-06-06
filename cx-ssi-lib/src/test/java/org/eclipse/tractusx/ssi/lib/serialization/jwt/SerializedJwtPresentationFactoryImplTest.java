@@ -5,16 +5,16 @@ import java.net.URI;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
-import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
+import org.eclipse.tractusx.ssi.lib.crypt.ed25519.Ed25519Key;
+import org.eclipse.tractusx.ssi.lib.did.resolver.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtFactory;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
-import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
+import org.eclipse.tractusx.ssi.lib.model.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
-import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
-import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED21559ProofSigner;
+import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataSigner;
 import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
@@ -41,7 +41,6 @@ class SerializedJwtPresentationFactoryImplTest {
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
     didDocumentResolver.register(credentialIssuer);
     jwtVerifier = new SignedJwtVerifier(didDocumentResolver.withRegistry());
-
     linkedDataProofGenerator =
         new LinkedDataProofGenerator(
             SignatureType.JWS,
@@ -75,7 +74,7 @@ class SerializedJwtPresentationFactoryImplTest {
             credentialIssuer.getDid(),
             List.of(credentialWithProof),
             "test-audience",
-            credentialIssuer.getPrivateKey());
+            Ed25519Key.asPrivateKey(credentialIssuer.getPrivateKey()));
 
     Assertions.assertNotNull(presentation);
     Assertions.assertDoesNotThrow(() -> jwtVerifier.verify(presentation));

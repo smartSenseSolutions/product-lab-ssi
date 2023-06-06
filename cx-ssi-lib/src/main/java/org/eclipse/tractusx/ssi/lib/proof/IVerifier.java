@@ -24,10 +24,24 @@ import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
+import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.DanubeTechMapper;
 
-public interface IVerifier {
-  public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
-      throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion;
+public class DanubTechVerifiableCredentialSerializerImpl implements VerifiableCredentialSerializer {
+  @Override
+  public VerifiableCredential deserialize(Map<String, Object> credentialJson) {
+
+    final com.danubetech.verifiablecredentials.VerifiableCredential dtCredential =
+        com.danubetech.verifiablecredentials.VerifiableCredential.fromMap(credentialJson);
+
+    return DanubeTechMapper.map(dtCredential);
+  }
+
+  @Override
+  public String serialize(VerifiableCredential credential) {
+
+    final com.danubetech.verifiablecredentials.VerifiableCredential dtCredential =
+        DanubeTechMapper.map(credential);
+
+    return dtCredential.toJson(true);
+  }
 }

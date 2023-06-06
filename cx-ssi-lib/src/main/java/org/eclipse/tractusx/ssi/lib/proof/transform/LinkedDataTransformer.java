@@ -37,6 +37,7 @@ import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.DanubeTechMapper;
 
 public class LinkedDataTransformer {
   @SneakyThrows
@@ -45,6 +46,7 @@ public class LinkedDataTransformer {
     VerifiableCredential copyCredential = new VerifiableCredential(credential);
     copyCredential.remove(VerifiableCredential.PROOF);
 
+    var dtCredential = DanubeTechMapper.map(copyCredential);
     try {
 
       RdfDataset rdfDataset = toDataset(copyCredential);

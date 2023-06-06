@@ -21,15 +21,9 @@ package org.eclipse.tractusx.ssi.lib.proof;
 
 import java.io.IOException;
 import java.net.URI;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import org.eclipse.tractusx.ssi.lib.SsiLibrary;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.LinkedDataProofGenerator;
@@ -79,14 +73,15 @@ public class LinkedDataProofValidationComponentTest {
     URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
 
-    VerifiableCredential credential =
+    final VerifiableCredential credential =
         TestCredentialFactory.createCredential(credentialIssuer, null);
 
     Proof proof =
         linkedDataProofGenerator.createProof(
             credential, verificationMethod, credentialIssuer.getPrivateKey());
 
-    VerifiableCredential credentialWithProof = TestCredentialFactory.attachProof(credential, proof);
+    final VerifiableCredential credentialWithProof =
+        TestCredentialFactory.createCredential(credentialIssuer, proof);
 
     DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern(VerifiableCredential.TIME_FORMAT).withZone(ZoneOffset.UTC);
@@ -137,41 +132,58 @@ public class LinkedDataProofValidationComponentTest {
     Assertions.assertTrue(isOk);
   }
 
-  @Test
-  public void testJWSproofGenerationAndVerification()
-      throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
-          KeyGenerationException {
-    SsiLibrary.initialize();
-    didDocumentResolver = new TestDidDocumentResolver();
+  //  @Test
+  //  public void testLinkedDataProofCheckBPNCredential() throws IOException {
+  //
+  //    this.didDocumentResolver = new TestDidDocumentResolver();
+  //
+  //    credentialIssuer = TestIdentityFactory.newBPNIdentityWithED25519Keys(false);
+  //
+  //    didDocumentResolver.register(credentialIssuer);
+  //
+  //    linkedDataProofValidation =
+  //        new LinkedDataProofValidation(
+  //            new LinkedDataHasher(),
+  //            new LinkedDataTransformer(),
+  //            new LinkedDataVerifier(didDocumentResolver.withRegistry()));
+  //
+  //    final VerifiableCredential credentialWithProof =
+  //        new VerifiableCredential(TestResourceUtil.getBPNVerifiableCredential());
+  //
+  //    var isOk = linkedDataProofValidation.checkProof(credentialWithProof);
+  //
+  //    Assertions.assertTrue(isOk);
+  //  }
 
-    credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
-    didDocumentResolver.register(credentialIssuer);
+  //   @Test
+  //   public void testJWTProofCheck() throws IOException {
 
-    // Generator
-    linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
-    // Verifier
-    linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(
-            SignatureType.JWS, didDocumentResolver.withRegistry());
+  //     this.didDocumentResolver = new TestDidDocumentResolver();
 
-    // prepare key
-    // 0 == ED21559
-    // 1 == JWS
-    URI verificationMethod =
-        credentialIssuer.getDidDocument().getVerificationMethods().get(1).getId();
+  //     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys(false);
+  //     didDocumentResolver.register(credentialIssuer);
 
-    VerifiableCredential credential =
-        TestCredentialFactory.createCredential(credentialIssuer, null);
+  //     // prepare key
+  //     final URI verificationMethod =
+  //         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
+  //     final byte[] privateKey = credentialIssuer.getPrivateKey();
 
-    JWSSignature2020 proof =
-        (JWSSignature2020)
-            linkedDataProofGenerator.createProof(
-                credential, verificationMethod, credentialIssuer.getPrivateKey());
+  //     VerifiableCredential credential = createCredential(null);
 
-    VerifiableCredential credentialWithProof = TestCredentialFactory.attachProof(credential, proof);
+  //     // Ed25519 Proof Builder
+  //     final LinkedDataProofGenerator generator = LinkedDataProofGenerator.create();
+  //     final Ed25519Signature2020 proof =
+  //         generator.createEd25519Signature2020(
+  //             credential,verificationMethod , privateKey);
 
-    var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
+  //     final Ed25519Signature2020 proof =
+  //         linkedDataProofGenerator.createEd25519Signature2020(
+  //             credential, verificationMethod, privateKey);
 
-    Assertions.assertTrue(isOk);
-  }
+  //     final VerifiableCredential credentialWithProof = createCredential(proof);
+
+  //     var isOk = linkedDataProofValidation.checkProof(credentialWithProof);
+
+  //     Assertions.assertTrue(isOk);
+  //   }
 }
