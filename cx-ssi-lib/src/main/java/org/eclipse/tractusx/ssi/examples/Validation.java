@@ -17,32 +17,23 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.jwt;
+package org.eclipse.tractusx.ssi.examples;
 
 import com.nimbusds.jwt.SignedJWT;
-import java.util.Date;
-import java.util.List;
-import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.exception.JwtAudienceCheckFailedException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtExpiredException;
+import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtValidator;
 
-public class SignedJwtValidator {
-
-  @SneakyThrows
-  public void validateDate(SignedJWT jwt) {
-    Date expiryDate = jwt.getJWTClaimsSet().getExpirationTime();
-    boolean isExpired = expiryDate.before(new Date()); // Todo add Timezone
-    if (isExpired) {
-      throw new JwtExpiredException(expiryDate);
-    }
+public class Validation {
+  public static void validateJWTDate(SignedJWT signedJWT, String audience)
+      throws JwtAudienceCheckFailedException, JwtExpiredException {
+    SignedJwtValidator jwtValidator = new SignedJwtValidator();
+    jwtValidator.validateDate(signedJWT);
   }
 
-  @SneakyThrows
-  public void validateAudiences(SignedJWT jwt, String expectedAudience) {
-    List<String> audiences = jwt.getJWTClaimsSet().getAudience();
-    boolean isValidAudience = audiences.stream().anyMatch(x -> x.equals(expectedAudience));
-    if (!isValidAudience) {
-      throw new JwtAudienceCheckFailedException(expectedAudience, audiences);
-    }
+  public static void validateJWTAudiences(SignedJWT signedJWT, String audience)
+      throws JwtAudienceCheckFailedException, JwtExpiredException {
+    SignedJwtValidator jwtValidator = new SignedJwtValidator();
+    jwtValidator.validateAudiences(signedJWT, audience);
   }
 }
