@@ -23,19 +23,14 @@ import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.SsiException;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
+
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
-import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
-import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
-import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.LinkedDataProofGenerator;
 
 public class VC {
   public static VerifiableCredential createVCWithoutProof() {

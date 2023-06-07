@@ -23,12 +23,12 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
+
+import org.eclipse.tractusx.ssi.lib.base.ISigner;
+import org.eclipse.tractusx.ssi.lib.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020Builder;
@@ -42,19 +42,22 @@ import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED21559ProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
 
+import com.nimbusds.jose.JOSEException;
+
 @RequiredArgsConstructor
 public class LinkedDataProofGenerator {
 
-  public static LinkedDataProofGenerator newInstance(SignatureType type)
-      throws UnsupportedSignatureTypeException {
-    if (type == SignatureType.ED21559) {
-      return new LinkedDataProofGenerator(
-          type, new LinkedDataHasher(), new LinkedDataTransformer(), new ED21559ProofSigner());
-    } else if (type == SignatureType.JWS) {
-      return new LinkedDataProofGenerator(
-          type, new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner());
-    } else {
-      throw new UnsupportedSignatureTypeException("Invalide signautre type");
+  public static LinkedDataProofGenerator newInstance(SignatureType type) throws UnsupportedSignatureTypeException {
+    switch (type) {
+      case ED21559:
+        return new LinkedDataProofGenerator(
+            new LinkedDataHasher(), new LinkedDataTransformer(), new ED21559ProofSigner(),
+            type);
+      case JWS:
+        return new LinkedDataProofGenerator(
+            new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner(), type);
+      default:
+        throw new UnsupportedSignatureTypeException("Currently we only support JWS and ED25519 signature!");
     }
   }
 
@@ -62,33 +65,42 @@ public class LinkedDataProofGenerator {
   private final LinkedDataHasher hasher;
   private final LinkedDataTransformer transformer;
   private final ISigner signer;
+  private final SignatureType type;
 
   public Proof createProof(
-      VerifiableCredential verifiableCredential, URI verificationMethodId, IPrivateKey privateKey)
-      throws SsiException, InvalidePrivateKeyFormat {
+      VerifiableCredential verifiableCredential, URI verificationMethodId, byte[] signingKey) {
 
     final TransformedLinkedData transformedData = transformer.transform(verifiableCredential);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
     byte[] signature;
-    signature = signer.sign(new HashedLinkedData(hashedData.getValue()), privateKey);
-
-    if (type == SignatureType.ED21559) {
-
-      final MultibaseString multibaseString = MultibaseFactory.create(signature);
-      return new Ed25519Signature2020Builder()
-          .proofPurpose(Ed25519Signature2020.PROOF_PURPOSE)
-          .proofValue(multibaseString.getEncoded())
-          .verificationMethod(verificationMethodId)
-          .created(Instant.now())
-          .build();
-    } else {
-
-      return new JWSSignature2020Builder()
-          .proofPurpose(JWSSignature2020.PROOF_PURPOSE)
-          .proofValue(new String(signature, StandardCharsets.UTF_8))
-          .verificationMethod(verificationMethodId)
-          .created(Instant.now())
-          .build();
+    
+    try {
+      signature = signer.sign(hashedData, signingKey);
+    } catch (JOSEException e) {
+      throw new SsiException(e.getMessage());
     }
+
+
+    final MultibaseString multibaseString = MultibaseFactory.create(signature);
+
+    switch (type) {
+      case ED21559:
+        return new Ed25519Signature2020Builder()
+            .proofPurpose(Ed25519Signature2020.PROOF_PURPOSE)
+            .proofValue(multibaseString.getEncoded())
+            .verificationMethod(verificationMethodId)
+            .created(Instant.now())
+            .build();
+      case JWS:
+        return new JWSSignature2020Builder()
+            .proofPurpose(JWSSignature2020.PROOF_PURPOSE)
+            .proofValue(multibaseString.getEncoded())
+            .verificationMethod(verificationMethodId)
+            .created(Instant.now())
+            .build();
+      default:
+        throw new UnsupportedOperationException("Currently we only support JWS and ED25519 signature!");
+    }
+
   }
 }

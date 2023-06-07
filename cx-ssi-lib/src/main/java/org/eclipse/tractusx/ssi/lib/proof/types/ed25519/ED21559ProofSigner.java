@@ -21,25 +21,22 @@ package org.eclipse.tractusx.ssi.lib.proof.types.ed25519;
 
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
-import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
-import org.eclipse.tractusx.ssi.lib.exception.SsiException;
-import org.eclipse.tractusx.ssi.lib.proof.ISigner;
+import org.eclipse.tractusx.ssi.lib.base.ISigner;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
 public class ED21559ProofSigner implements ISigner {
 
-  @Override
-  public byte[] sign(HashedLinkedData hashedLinkedData, IPrivateKey privateKey)
-      throws SsiException {
-    final byte[] message = hashedLinkedData.getValue();
+    @Override
+    public byte[] sign(HashedLinkedData hashedLinkedData, byte[] signingKey) {
+        final byte[] message = hashedLinkedData.getValue();
 
-    Ed25519PrivateKeyParameters secretKeyParameters =
-        new Ed25519PrivateKeyParameters(privateKey.asByte());
+        Ed25519PrivateKeyParameters secretKeyParameters = new Ed25519PrivateKeyParameters(signingKey, 0);
 
-    final Ed25519Signer signer = new Ed25519Signer();
-    signer.init(true, secretKeyParameters);
-    signer.update(message, 0, message.length);
+        final Ed25519Signer signer = new Ed25519Signer();
+        signer.init(true, secretKeyParameters);
+        signer.update(message, 0, message.length);
 
-    return signer.generateSignature();
-  }
+        return signer.generateSignature();
+    }
+
 }

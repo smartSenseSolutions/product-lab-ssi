@@ -19,90 +19,76 @@
 
 package org.eclipse.tractusx.ssi.lib.proof.types.ed25519;
 
-import java.io.IOException;
 import java.net.URI;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+
 import org.bouncycastle.crypto.Signer;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
-import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.lib.base.IVerifier;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationKey2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
+import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolver;
+import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistry;
+
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+
 
 @RequiredArgsConstructor
 public class ED25519ProofVerifier implements IVerifier {
 
-  private final DidDocumentResolverRegistry didDocumentResolverRegistry;
+    private final DidDocumentResolverRegistry didDocumentResolverRegistry;
 
-  public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
-      throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion {
-
-    final URI issuer = credential.getIssuer();
-    final Did issuerDid = DidParser.parse(issuer);
-
-    final DidDocumentResolver didDocumentResolver;
-    didDocumentResolver = didDocumentResolverRegistry.get(issuerDid.getMethod());
-
-    final DidDocument document = didDocumentResolver.resolve(issuerDid);
-    final Proof proof = credential.getProof();
-    if (!proof.getType().equals(Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018)) {
-      throw new UnsupportedSignatureTypeException(proof.getType());
+    public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
+        throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException {
+  
+      final URI issuer = credential.getIssuer();
+      final Did issuerDid = DidParser.parse(issuer);
+  
+      final DidDocumentResolver didDocumentResolver;
+      didDocumentResolver = didDocumentResolverRegistry.get(issuerDid.getMethod());
+  
+      final DidDocument document = didDocumentResolver.resolve(issuerDid);
+      final Proof proof = credential.getProof();
+      if (!proof.getType().equals(Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018)) {
+        throw new UnsupportedSignatureTypeException(proof.getType());
+      }
+      final Ed25519Signature2020 ed25519Signature2020 = new Ed25519Signature2020(proof);
+  
+      final URI verificationMethodId = ed25519Signature2020.getVerificationMethod();
+      final Ed25519VerificationKey2020 key =
+          document.getVerificationMethods().stream()
+              .filter(v -> v.getId().equals(verificationMethodId))
+              .filter(Ed25519VerificationKey2020::isInstance)
+              .map(Ed25519VerificationKey2020::new)
+              .findFirst()
+              .orElseThrow();
+  
+      final MultibaseString publicKey = key.getPublicKeyBase58();
+      final MultibaseString signature = ed25519Signature2020.getProofValue();
+      return verify(hashedLinkedData, signature.getDecoded(), publicKey.getDecoded());
     }
-    final Ed25519Signature2020 ed25519Signature2020 = new Ed25519Signature2020(proof);
-
-    final URI verificationMethodId = ed25519Signature2020.getVerificationMethod();
-    final Ed25519VerificationMethod key =
-        document.getVerificationMethods().stream()
-            .filter(v -> v.getId().equals(verificationMethodId))
-            .filter(Ed25519VerificationMethod::isInstance)
-            .map(Ed25519VerificationMethod::new)
-            .findFirst()
-            .orElseThrow(
-                () ->
-                    new NoVerificationKeyFoundExcpetion(
-                        "No Ed25519 verification key found in DID Document"));
-
-    // final MultibaseString publicKey = key.getPublicKeyBase58();
-    IPublicKey publicKey;
-    try {
-      publicKey = (IPublicKey) new x21559PublicKey(key.getPublicKeyBase58().getEncoded(), false);
-    } catch (IOException e) {
-      throw new InvalidePublicKeyFormat(e.getCause());
+  
+    @SneakyThrows
+    public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, byte[] publicKey) {
+  
+      final byte[] message = hashedLinkedData.getValue();
+  
+      Signer verifier = new Ed25519Signer();
+      Ed25519PublicKeyParameters publicKeyParameters = new Ed25519PublicKeyParameters(publicKey, 0);
+      verifier.init(false, publicKeyParameters);
+      verifier.update(message, 0, message.length);
+  
+      return verifier.verifySignature(signature);
     }
-
-    final MultibaseString signature = ed25519Signature2020.getProofValue();
-    return verify(hashedLinkedData, signature.getDecoded(), publicKey);
-  }
-
-  @SneakyThrows
-  public boolean verify(HashedLinkedData hashedLinkedData, byte[] signature, IPublicKey publicKey) {
-
-    final byte[] message = hashedLinkedData.getValue();
-
-    Signer verifier = new Ed25519Signer();
-    Ed25519PublicKeyParameters publicKeyParameters =
-        new Ed25519PublicKeyParameters(publicKey.asByte());
-
-    verifier.init(false, publicKeyParameters);
-    verifier.update(message, 0, message.length);
-
-    return verifier.verifySignature(signature);
-  }
+    
 }

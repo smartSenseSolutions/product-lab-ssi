@@ -30,7 +30,7 @@ import lombok.NonNull;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
-import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
+import org.eclipse.tractusx.ssi.lib.util.SerializeUtil;
 
 // @formatter:off
 /**
