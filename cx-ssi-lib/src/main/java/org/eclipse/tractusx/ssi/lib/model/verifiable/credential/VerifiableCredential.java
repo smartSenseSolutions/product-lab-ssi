@@ -197,4 +197,17 @@ public class VerifiableCredential extends JsonLdObject {
         .verifiableCredentialStatus(getVerifiableCredentialStatus())
         .build();
   }
+
+  public VerifiableCredential removeProof(){
+
+    VerifiableCredentialBuilder builder = new VerifiableCredentialBuilder();
+    return builder.id(this.getId())
+    .context(this.getContext())
+    .credentialSubject(this.getCredentialSubject())
+    .expirationDate(this.getExpirationDate())
+    .issuanceDate(this.getIssuanceDate())
+    .issuer(this.getIssuer())
+    .type(this.getTypes())
+    .build();
+  }
 }

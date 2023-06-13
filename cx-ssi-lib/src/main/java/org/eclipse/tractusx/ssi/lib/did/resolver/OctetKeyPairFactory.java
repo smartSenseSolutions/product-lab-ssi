@@ -26,7 +26,25 @@ package org.eclipse.tractusx.ssi.lib.did.resolver;
 /** NoVerificationKeyFoundExcpetion */
 public class NoVerificationKeyFoundExcpetion extends Exception {
 
-  public NoVerificationKeyFoundExcpetion(String message) {
-    super(message);
+public class OctetKeyPairFactory {
+
+  public OctetKeyPair fromPrivateKey(byte[] privateKey) {
+    return new OctetKeyPair.Builder(Curve.Ed25519, new Base64URL(""))
+        .d(Base64URL.encode(privateKey))
+        .build();
+  }
+
+  public OctetKeyPair fromKeyPair(byte []publicKey,byte[] privateKey) {
+    return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey))
+        .d(Base64URL.encode(privateKey))
+        .build();
+  }
+  
+
+  public OctetKeyPair fromKeyPairWithKeyID(String keyID,byte []publicKey,byte[] privateKey) {
+    return new OctetKeyPair.Builder(Curve.Ed25519, Base64URL.encode(publicKey))
+        .d(Base64URL.encode(privateKey))
+        .keyID(keyID)
+        .build();
   }
 }

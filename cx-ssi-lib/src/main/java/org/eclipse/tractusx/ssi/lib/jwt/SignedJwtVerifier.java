@@ -77,6 +77,7 @@ public class SignedJwtVerifier {
     // verify JWT signature
     // TODO Don't try out each key. Better -> use key authorization key
     for (VerificationMethod verificationMethod : verificationMethods) {
+<<<<<<< HEAD
       if (JWKVerificationMethod.isInstance(verificationMethod)) {
         final JWKVerificationMethod method = new JWKVerificationMethod(verificationMethod);
         final String kty = method.getPublicKeyJwk().getKty();
@@ -101,6 +102,23 @@ public class SignedJwtVerifier {
                 .build();
 
         if (jwt.verify(new Ed25519Verifier(keyPair))) return true;
+=======
+      if (!Ed25519VerificationMethod.isInstance(verificationMethod)) continue;
+
+      var method = new Ed25519VerificationMethod(verificationMethod);
+      var multibase = method.getPublicKeyBase58();
+
+      Ed25519PublicKeyParameters publicKeyParameters =
+          new Ed25519PublicKeyParameters(multibase.getDecoded(), 0);
+      var keyPair =
+          new OctetKeyPair.Builder(
+                  Curve.Ed25519, Base64URL.encode(publicKeyParameters.getEncoded()))
+              .build();
+      var isValid = jwt.verify(new Ed25519Verifier(keyPair));
+
+      if (!isValid) {
+        throw new JwtSignatureCheckFailedException(issuerDid, verificationMethod.getId());
+>>>>>>> 44eabd2 (Feat: JWS proof generation and verification)
       }
     }
 

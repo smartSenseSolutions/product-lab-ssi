@@ -21,8 +21,10 @@ package org.eclipse.tractusx.ssi.lib.model.did;
 
 import java.net.URI;
 import java.util.Map;
-import lombok.NoArgsConstructor;
+
 import org.eclipse.tractusx.ssi.lib.crypt.jwk.JsonWebKey;
+
+import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class JWKVerificationMethodBuilder {
@@ -50,8 +52,8 @@ public class JWKVerificationMethodBuilder {
             this.did.toUri(),
             JWKVerificationMethod.PUBLIC_KEY_JWK,
             Map.of(
-                JWKVerificationMethod.JWK_KEK_TYPE, jwk.getKeyType(),
-                JWKVerificationMethod.JWK_CURVE, jwk.getCurv(),
-                JWKVerificationMethod.JWK_X, jwk.getX())));
+                "kty", jwk.getKeyType(),
+                "crv", jwk.getCurv(),
+                "x", jwk.getX())));
   }
 }

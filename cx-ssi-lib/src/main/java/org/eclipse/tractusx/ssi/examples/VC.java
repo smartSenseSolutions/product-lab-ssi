@@ -30,7 +30,8 @@ import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCreden
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialBuilder;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialSubject;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialType;
-import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.LinkedDataProofGenerator;
+import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
+import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 
 public class VC {
   public static VerifiableCredential createVCWithoutProof() {
@@ -73,39 +74,10 @@ public class VC {
             .type(credential.getTypes());
 
     // Ed25519 Proof Builder
-    final LinkedDataProofGenerator generator =
-        LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
+    final LinkedDataProofGenerator generator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
     final Ed25519Signature2020 proof =
-        (Ed25519Signature2020)
-            generator.createProof(builder.build(), URI.create(issuer + "#key-1"), privateKey);
-
-    // Adding Proof to VC
-    builder.proof(proof);
-
-    return builder.build();
-  }
-
-  public static VerifiableCredential createVCWithJWSProof(
-      VerifiableCredential credential, IPrivateKey privateKey, Did issuer)
-      throws UnsupportedSignatureTypeException, SsiException, InvalidePrivateKeyFormat {
-
-    // VC Builder
-    final VerifiableCredentialBuilder builder =
-        new VerifiableCredentialBuilder()
-            .context(credential.getContext())
-            .id(credential.getId())
-            .issuer(issuer.toUri())
-            .issuanceDate(Instant.now())
-            .credentialSubject(credential.getCredentialSubject())
-            .expirationDate(credential.getExpirationDate())
-            .type(credential.getTypes());
-
-    // JWS Proof Builder
-    final LinkedDataProofGenerator generator =
-        LinkedDataProofGenerator.newInstance(SignatureType.JWS);
-    final JWSSignature2020 proof =
-        (JWSSignature2020)
-            generator.createProof(builder.build(), URI.create(issuer + "#key-1"), privateKey);
+        (Ed25519Signature2020) generator.createProof(
+        builder.build(), URI.create(issuer + "#key-1"), privateKey);
 
     // Adding Proof to VC
     builder.proof(proof);

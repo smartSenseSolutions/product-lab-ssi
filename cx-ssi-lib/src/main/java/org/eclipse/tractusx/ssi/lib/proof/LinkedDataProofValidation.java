@@ -30,7 +30,7 @@ import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.verify.LinkedDataVerifier;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public class LinkedDataProofValidation {
 
   public static LinkedDataProofValidation newInstance(SignatureType type,
@@ -38,7 +38,8 @@ public class LinkedDataProofValidation {
     return new LinkedDataProofValidation(
         new LinkedDataHasher(),
         new LinkedDataTransformer(),
-        type == SignatureType.ED21559? new ED25519ProofVerifier(didDocumentResolverRegistry) : new JWSProofVerifier(didDocumentResolverRegistry) );
+        type == SignatureType.ED21559 ? new ED25519ProofVerifier(didDocumentResolverRegistry)
+            : new JWSProofVerifier(didDocumentResolverRegistry));
   }
 
   private final LinkedDataHasher hasher;
@@ -47,9 +48,10 @@ public class LinkedDataProofValidation {
 
   @SneakyThrows
   public boolean verifiyProof(VerifiableCredential verifiableCredential) {
-    final TransformedLinkedData transformedData = transformer.transform(verifiableCredential);
-    final HashedLinkedData hashedData = hasher.hash(transformedData);
 
+    final TransformedLinkedData transformedData = transformer.transform(verifiableCredential.removeProof());
+    final HashedLinkedData hashedData = hasher.hash(transformedData);
+        
     return verifier.verify(hashedData, verifiableCredential);
   }
 }
