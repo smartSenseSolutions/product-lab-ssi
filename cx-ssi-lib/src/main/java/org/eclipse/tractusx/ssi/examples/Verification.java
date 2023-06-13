@@ -29,6 +29,7 @@ import org.eclipse.tractusx.ssi.lib.exception.JwtException;
 import org.eclipse.tractusx.ssi.lib.jwt.SignedJwtVerifier;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofValidation;
+import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 
 public class Verification {
 
@@ -79,21 +80,6 @@ public class Verification {
 
     LinkedDataProofValidation proofValidation =
         LinkedDataProofValidation.newInstance(SignatureType.JWS, didDocumentResolverRegistry);
-    return proofValidation.verifiyProof(verifiableCredential);
-  }
-
-  public static boolean verifyJWSLD(VerifiableCredential verifiableCredential) {
-    // DID Resolver Constracture params
-    DidWebParser didParser = new DidWebParser();
-    var httpClient = HttpClient.newHttpClient();
-    var enforceHttps = false;
-
-    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-    didDocumentResolverRegistry.register(
-        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
-
-    LinkedDataProofValidation proofValidation =
-        LinkedDataProofValidation.newInstance(SignatureType.JWS,didDocumentResolverRegistry);
     return proofValidation.verifiyProof(verifiableCredential);
   }
 }

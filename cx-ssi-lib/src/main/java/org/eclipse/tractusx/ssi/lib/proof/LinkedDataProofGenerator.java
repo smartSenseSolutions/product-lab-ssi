@@ -38,11 +38,11 @@ public class LinkedDataProofGenerator {
 
   public static LinkedDataProofGenerator newInstance(SignatureType type) {
     if (type == SignatureType.ED21559) {
-      return new LinkedDataProofGenerator(type,
-          new LinkedDataHasher(), new LinkedDataTransformer(), new ED21559ProofSigner());
+      return new LinkedDataProofGenerator(
+          type, new LinkedDataHasher(), new LinkedDataTransformer(), new ED21559ProofSigner());
     } else {
-      return new LinkedDataProofGenerator(type,
-          new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner());
+      return new LinkedDataProofGenerator(
+          type, new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner());
     }
   }
 
@@ -76,8 +76,6 @@ public class LinkedDataProofGenerator {
           .verificationMethod(verificationMethodId)
           .created(Instant.now())
           .build();
-
     }
-
   }
 }
