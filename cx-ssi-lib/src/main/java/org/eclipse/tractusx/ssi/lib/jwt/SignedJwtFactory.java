@@ -31,7 +31,8 @@ import com.nimbusds.jwt.SignedJWT;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.lib.did.resolver.OctetKeyPairFactory;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
