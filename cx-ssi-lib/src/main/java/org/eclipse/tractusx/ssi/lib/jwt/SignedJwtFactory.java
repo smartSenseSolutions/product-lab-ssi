@@ -31,8 +31,9 @@ import com.nimbusds.jwt.SignedJWT;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
+import org.eclipse.tractusx.ssi.lib.crypt.octet.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.resolver.OctetKeyPairFactory;
 import org.eclipse.tractusx.ssi.lib.serialization.jwt.SerializedVerifiablePresentation;
 
 /**
@@ -60,7 +61,7 @@ public class SignedJwtFactory {
       Did didIssuer,
       String audience,
       SerializedVerifiablePresentation serializedPresentation,
-      byte[] privateKey) {
+      IPrivateKey privateKey) {
 
     final String issuer = didIssuer.toString();
     final String subject = didIssuer.toString();
@@ -79,7 +80,7 @@ public class SignedJwtFactory {
             .jwtID(UUID.randomUUID().toString())
             .build();
 
-    final OctetKeyPair octetKeyPair = octetKeyPairFactory.get(privateKey);
+    final OctetKeyPair octetKeyPair = octetKeyPairFactory.fromPrivateKey(privateKey);
     return createSignedES256Jwt(octetKeyPair, claimsSet, issuer);
   }
 
@@ -97,6 +98,7 @@ public class SignedJwtFactory {
                     .map(JWSAlgorithm::getName)
                     .collect(Collectors.joining(", "))));
       }
+
       var algorithm = JWSAlgorithm.EdDSA;
       var type = JOSEObjectType.JWT;
       var header =

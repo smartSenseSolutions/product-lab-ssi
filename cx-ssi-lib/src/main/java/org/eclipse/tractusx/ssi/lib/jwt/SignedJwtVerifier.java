@@ -31,12 +31,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtSignatureCheckFailedException;
 import org.eclipse.tractusx.ssi.lib.model.did.*;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.resolver.DidDocumentResolverRegistry;
 
 /**
  * Convenience/helper class to generate and verify Signed JSON Web Tokens (JWTs) for communicating
@@ -75,9 +75,9 @@ public class SignedJwtVerifier {
     // verify JWT signature
     // TODO Don't try out each key. Better -> use key authorization key
     for (VerificationMethod verificationMethod : verificationMethods) {
-      if (!Ed25519VerificationKey2020.isInstance(verificationMethod)) continue;
+      if (!Ed25519VerificationMethod.isInstance(verificationMethod)) continue;
 
-      var method = new Ed25519VerificationKey2020(verificationMethod);
+      var method = new Ed25519VerificationMethod(verificationMethod);
       var multibase = method.getPublicKeyBase58();
 
       Ed25519PublicKeyParameters publicKeyParameters =
