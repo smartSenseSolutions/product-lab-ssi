@@ -20,8 +20,10 @@
 package org.eclipse.tractusx.ssi.lib.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,8 @@ public class TestResourceUtil {
   private static final ObjectMapper MAPPER = new ObjectMapper();
   private static final String DID_DOCUMENT_ED25519 = "did-document/document.ed25519.json";
   private static final String DID_DOCUMENT_ED25519_BPN = "did-document/document.ed25519.bpn.json";
+  private static final String PUBLIC_KEY_ED25519 = "keys/ed25519/public.pem";
+  private static final String PRIVATE_KEY_ED25519 = "keys/ed25519/private.pem";
   private static String VERIFIABLE_CREDENTIAL_ALUMNI =
       "verifiable-credential/alumni-credential.json";
   private static String VERIFIABLE_PRESENTATION_ALUMNI =
@@ -68,6 +72,32 @@ public class TestResourceUtil {
 
   public static Map<String, Object> getBPNDidDocument() {
     return readJsonResource(DID_DOCUMENT_ED25519_BPN);
+  }
+
+  public static byte[] getPublicKeyEd25519() {
+    return readPemResource(PUBLIC_KEY_ED25519);
+  }
+
+  public static byte[] getPrivateKeyEd25519() {
+    return readPemResource(PRIVATE_KEY_ED25519);
+  }
+
+  public static String getPublicKeyEd25519AsString() {
+    try {
+      return new String(
+          readResource(PUBLIC_KEY_ED25519).readAllBytes(), StandardCharsets.ISO_8859_1);
+    } catch (IOException e) {
+      throw new RuntimeException(e.getCause());
+    }
+  }
+
+  public static String getPrivateKeyEd25519AsString() {
+    try {
+      return new String(
+          readResource(PRIVATE_KEY_ED25519).readAllBytes(), StandardCharsets.ISO_8859_1);
+    } catch (IOException e) {
+      throw new RuntimeException(e.getCause());
+    }
   }
 
   @SneakyThrows
