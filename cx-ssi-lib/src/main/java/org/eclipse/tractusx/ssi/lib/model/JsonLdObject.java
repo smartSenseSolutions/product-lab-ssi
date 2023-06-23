@@ -19,10 +19,8 @@
 
 package org.eclipse.tractusx.ssi.lib.model;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.net.URI;
+import java.util.*;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 @ToString(callSuper = true)
