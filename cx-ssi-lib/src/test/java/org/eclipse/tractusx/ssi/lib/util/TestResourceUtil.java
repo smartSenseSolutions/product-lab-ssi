@@ -31,6 +31,8 @@ import java.util.Objects;
 import lombok.SneakyThrows;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
 public class TestResourceUtil {
 

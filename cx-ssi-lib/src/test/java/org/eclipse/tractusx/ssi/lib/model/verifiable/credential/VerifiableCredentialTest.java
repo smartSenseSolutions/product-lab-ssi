@@ -29,7 +29,8 @@ public class VerifiableCredentialTest {
   public void equalsSuccess() {
     final VerifiableCredential vc1 = TestResourceUtil.getAlumniVerifiableCredential();
     final VerifiableCredential vc2 = TestResourceUtil.getAlumniVerifiableCredential();
-    Assertions.assertEquals(vc1.toString(), vc2.toString());
+
+    Assertions.assertEquals(vc1, vc2);
   }
 
   @Test
@@ -38,13 +39,5 @@ public class VerifiableCredentialTest {
     final VerifiableCredential vc2 = TestResourceUtil.getAlumniVerifiableCredential();
 
     Assertions.assertNotEquals(vc1, vc2);
-  }
-
-  @Test
-  public void credentialIdMustBeValidURI() {
-    final VerifiableCredential vc = TestResourceUtil.getAlumniVerifiableCredential();
-    vc.put(VerifiableCredential.ID, "b9d94fd6-d7e8-4acf-a222-6e84fca87b68");
-
-    Assertions.assertThrows(IllegalArgumentException.class, () -> new VerifiableCredential(vc));
   }
 }

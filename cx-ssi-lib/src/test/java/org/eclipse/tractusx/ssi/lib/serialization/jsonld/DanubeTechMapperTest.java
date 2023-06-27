@@ -19,34 +19,41 @@
 
 package org.eclipse.tractusx.ssi.lib.serialization.jsonld;
 
+import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
+import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.DanubeTechMapper;
+import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 public class DanubeTechMapperTest {
 
-  // @SneakyThrows
-  // @Test
-  // public void canMapVerifiableCredential() {
+  @SneakyThrows
+  @Test
+  public void canMapVerifiableCredential() {
 
-  //   VerifiableCredential expected =
-  //       new VerifiableCredential(TestResourceUtil.getAlumniVerifiableCredential());
+    VerifiableCredential expected =
+        new VerifiableCredential(TestResourceUtil.getAlumniVerifiableCredential());
 
-  //   com.danubetech.verifiablecredentials.VerifiableCredential dtCredential =
-  //       DanubeTechMapper.map(expected);
+    com.danubetech.verifiablecredentials.VerifiableCredential dtCredential =
+        DanubeTechMapper.map(expected);
+    VerifiableCredential result = DanubeTechMapper.map(dtCredential);
 
-  //   VerifiableCredential result = DanubeTechMapper.map(dtCredential);
+    Assertions.assertEquals(expected.toPrettyJson(), result.toPrettyJson());
+  }
 
-  //   Assertions.assertEquals(expected.toPrettyJson(), result.toPrettyJson());
-  // }
+  @SneakyThrows
+  @Test
+  public void canMapVerifiablePresentation() {
 
-  // @SneakyThrows
-  // @Test
-  // public void canMapVerifiablePresentation() {
+    VerifiablePresentation expected =
+        new VerifiablePresentation(TestResourceUtil.getAlumniVerifiablePresentation());
 
-  //   VerifiablePresentation expected =
-  //       new VerifiablePresentation(TestResourceUtil.getAlumniVerifiablePresentation());
+    com.danubetech.verifiablecredentials.VerifiablePresentation dtCredential =
+        DanubeTechMapper.map(expected);
+    VerifiablePresentation result = DanubeTechMapper.map(dtCredential);
 
-  //   com.danubetech.verifiablecredentials.VerifiablePresentation dtCredential =
-  //       DanubeTechMapper.map(expected);
-  //   VerifiablePresentation result =  //DanubeTechMapper.map(dtCredential);
-
-  //   Assertions.assertEquals(expected.toPrettyJson(), result.toPrettyJson());
-  // }
+    Assertions.assertEquals(expected.toPrettyJson(), result.toPrettyJson());
+  }
 }
