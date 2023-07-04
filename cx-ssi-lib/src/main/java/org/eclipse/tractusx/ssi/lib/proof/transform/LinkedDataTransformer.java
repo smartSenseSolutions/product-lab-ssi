@@ -21,23 +21,18 @@
 
 package org.eclipse.tractusx.ssi.lib.proof.transform;
 
-import com.apicatalog.jsonld.JsonLd;
-import com.apicatalog.jsonld.JsonLdError;
-import com.apicatalog.jsonld.JsonLdOptions;
-import com.apicatalog.jsonld.api.ToRdfApi;
-import com.apicatalog.jsonld.document.JsonDocument;
-import com.apicatalog.jsonld.http.media.MediaType;
 import com.apicatalog.rdf.RdfDataset;
 import com.apicatalog.rdf.io.nquad.NQuadsWriter;
+import foundation.identity.jsonld.ConfigurableDocumentLoader;
+import foundation.identity.jsonld.JsonLDException;
+import foundation.identity.jsonld.JsonLDObject;
 import io.setl.rdf.normalization.RdfNormalize;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
-import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.DanubeTechMapper;
 
 public class LinkedDataTransformer {
   @SneakyThrows
@@ -46,10 +41,27 @@ public class LinkedDataTransformer {
     VerifiableCredential copyCredential = new VerifiableCredential(credential);
     copyCredential.remove(VerifiableCredential.PROOF);
 
-    var dtCredential = DanubeTechMapper.map(copyCredential);
     try {
 
-      RdfDataset rdfDataset = toDataset(copyCredential);
+      var properties = new HashMap<>(copyCredential);
+      properties.remove(VerifiableCredential.CONTEXT);
+      properties.remove(VerifiableCredential.TYPE);
+      properties.remove(VerifiableCredential.ID);
+      var jsonLdCredential =
+          JsonLDObject.builder()
+              .id(credential.getId())
+              .contexts(credential.getContext())
+              .types(credential.getTypes())
+              .properties(properties)
+              .build();
+
+      var documentLoader = new ConfigurableDocumentLoader();
+      documentLoader.setEnableHttps(true);
+      documentLoader.setEnableLocalCache(true);
+      documentLoader.setHttpsContexts(credential.getContext());
+      jsonLdCredential.setDocumentLoader(documentLoader);
+
+      RdfDataset rdfDataset = jsonLdCredential.toDataset();
       rdfDataset = RdfNormalize.normalize(rdfDataset, "urdna2015");
       StringWriter stringWriter = new StringWriter();
       NQuadsWriter nQuadsWriter = new NQuadsWriter(stringWriter);
