@@ -37,12 +37,7 @@ import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredEx
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
-import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
-import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
-import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethod;
-import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.*;
 
 /**
  * Convenience/helper class to verify Signed JSON Web Tokens (JWTs) for communicating between
