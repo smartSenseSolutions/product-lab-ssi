@@ -17,19 +17,30 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.did.resolver;
+package org.eclipse.tractusx.ssi.lib.did.web;
 
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.DidMethodIdentifier;
+import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 
-@Deprecated
-/**
- * @deprecated replaced by {@link DidResolver}
- */
-public interface DidDocumentResolver {
+public abstract class AbstractDidWebResolverTest {
+  protected DidDocument didWebDoc;
+  protected Did validDidWeb;
+  protected DidWebResolver resolver;
+  protected static Did VALID_DID_KEY =
+      new Did(
+          new DidMethod("key"),
+          new DidMethodIdentifier("z6Mkfriq1MqLBoPWecGoDLjguo1sB9brj6wT3qZ5BxkKpuP6"));
 
-  DidMethod getSupportedMethod();
+  public AbstractDidWebResolverTest(Did validDidWeb) {
+    this.validDidWeb = validDidWeb;
+    this.didWebDoc = new DidDocument(TestResourceUtil.getPublishedDidDocument());
+    System.out.println("Testing with DID: " + validDidWeb.toString());
+  }
 
-  DidDocument resolve(Did did);
+  public abstract void shouldResolveValidWebDid() throws Exception;
+
+  public abstract void shouldNotResolveNonWebDid() throws Exception;
 }

@@ -19,17 +19,26 @@
 
 package org.eclipse.tractusx.ssi.lib.did.resolver;
 
-import org.eclipse.tractusx.ssi.lib.model.did.Did;
-import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
-import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
+public class DidResolverException extends Exception {
 
-@Deprecated
-/**
- * @deprecated replaced by {@link DidResolver}
- */
-public interface DidDocumentResolver {
+  private static final long serialVersionUID = 1L;
 
-  DidMethod getSupportedMethod();
+  public DidResolverException() {}
 
-  DidDocument resolve(Did did);
+  public DidResolverException(String message) {
+    super(message);
+  }
+
+  public DidResolverException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public DidResolverException(Throwable cause) {
+    super(cause);
+  }
+
+  public DidResolverException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 }
