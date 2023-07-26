@@ -55,6 +55,7 @@ public class LinkedDataTransformer {
       var normalized = stringWriter.getBuffer().toString();
 
       return new TransformedLinkedData(normalized);
+
     } catch (NoSuchAlgorithmException e) {
       throw new RuntimeException(e);
     } catch (IOException e) {

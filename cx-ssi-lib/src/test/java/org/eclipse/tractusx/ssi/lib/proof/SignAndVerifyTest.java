@@ -49,7 +49,6 @@ public class SignAndVerifyTest {
     didDocumentResolver.register(testIdentity);
 
     var data = "Hello World".getBytes();
-
     var signer = new ED21559ProofSigner();
     var verifier = new ED25519ProofVerifier(didDocumentResolver.withRegistry());
 
