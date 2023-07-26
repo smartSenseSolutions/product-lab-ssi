@@ -24,12 +24,12 @@ import com.apicatalog.jsonld.JsonLdOptions;
 import com.apicatalog.jsonld.document.JsonDocument;
 import com.apicatalog.jsonld.http.media.MediaType;
 import com.apicatalog.jsonld.processor.ExpansionProcessor;
-import foundation.identity.jsonld.JsonLDObject;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import java.util.Map;
+import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 
 public class JsonLdValidatorImpl implements JsonLdValidator {
 
@@ -58,7 +58,7 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
     }
   }
 
-  private void validateJsonLd(JsonLDObject jsonLdObject) {
+  private void validateJsonLd(JsonLdObject jsonLdObject) {
 
     try {
 
@@ -81,7 +81,7 @@ public class JsonLdValidatorImpl implements JsonLdValidator {
     }
   }
 
-  public boolean validate(JsonLDObject jsonLdObject) throws IllegalStateException {
+  public boolean validate(JsonLdObject jsonLdObject) throws IllegalStateException {
     validateJsonLd(jsonLdObject);
     return true; // Todo better handling
   }

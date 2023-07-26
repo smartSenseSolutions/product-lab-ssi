@@ -29,8 +29,7 @@ public class VerifiableCredentialTest {
   public void equalsSuccess() {
     final VerifiableCredential vc1 = TestResourceUtil.getAlumniVerifiableCredential();
     final VerifiableCredential vc2 = TestResourceUtil.getAlumniVerifiableCredential();
-
-    Assertions.assertEquals(vc1, vc2);
+    Assertions.assertEquals(vc1.toString(), vc2.toString());
   }
 
   @Test

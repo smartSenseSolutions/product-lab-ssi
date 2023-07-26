@@ -19,9 +19,9 @@
 
 package org.eclipse.tractusx.ssi.lib.serialization.jsonLd;
 
-import foundation.identity.jsonld.JsonLDObject;
+import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 
 public interface JsonLdValidator {
 
-  public boolean validate(JsonLDObject jsonLdObject);
+  public boolean validate(JsonLdObject jsonLdObject);
 }
