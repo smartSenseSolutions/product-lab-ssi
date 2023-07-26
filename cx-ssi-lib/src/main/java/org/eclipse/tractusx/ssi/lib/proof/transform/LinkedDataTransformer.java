@@ -14,6 +14,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *
+ *
+ *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
@@ -53,6 +55,7 @@ public class LinkedDataTransformer {
       var normalized = stringWriter.getBuffer().toString();
 
       return new TransformedLinkedData(normalized);
+
     } catch (NoSuchAlgorithmException e) {
       throw new RuntimeException(e);
     } catch (IOException e) {
