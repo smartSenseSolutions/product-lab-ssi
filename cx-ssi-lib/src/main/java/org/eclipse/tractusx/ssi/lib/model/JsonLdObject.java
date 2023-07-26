@@ -19,9 +19,13 @@
 
 package org.eclipse.tractusx.ssi.lib.model;
 
+import com.apicatalog.jsonld.loader.DocumentLoader;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import java.net.URI;
 import java.util.*;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
@@ -100,5 +104,9 @@ public abstract class JsonLdObject extends HashMap<String, Object> {
 
   public String toPrettyJson() {
     return SerializeUtil.toPrettyJson(this);
+  }
+
+  public synchronized JsonObject toJsonObject() {
+    return Json.createObjectBuilder(this).build();
   }
 }

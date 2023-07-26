@@ -56,13 +56,7 @@ public class JWSProofSigner implements ISigner {
       throw new SsiException(e.getMessage());
     }
 
-    // var algorithm = JWSAlgorithm.EdDSA;
-    // var type = JOSEObjectType.JWT;
     var header = new JWSHeader.Builder(JWSAlgorithm.EdDSA).build();
-
-    // new JWSHeader(algorithm, type, null, null, null, null, null, null, null, null, null, false,
-    // null,
-    //        null);
     Payload payload = new Payload(hashedLinkedData.getValue());
     JWSObject jwsObject = new JWSObject(header, payload);
 
