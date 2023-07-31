@@ -17,17 +17,12 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.proof;
+package org.eclipse.tractusx.ssi.lib.exception;
 
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
-import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
-import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
+/** NoVerificationKeyFoundExcpetion */
+public class NoVerificationKeyFoundExcpetion extends Exception {
 
-public interface IVerifier {
-  public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
-      throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion;
+  public NoVerificationKeyFoundExcpetion(String message) {
+    super(message);
+  }
 }
