@@ -35,6 +35,7 @@ import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
+import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -53,7 +54,8 @@ public class JWSProofVerifier implements IVerifier {
   private final DidDocumentResolverRegistry didDocumentResolverRegistry;
 
   public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
-      throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException {
+      throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
+          NoVerificationKeyFoundExcpetion {
 
     final URI issuer = credential.getIssuer();
     final Did issuerDid = DidParser.parse(issuer);
@@ -78,7 +80,10 @@ public class JWSProofVerifier implements IVerifier {
             .filter(JWKVerificationMethod::isInstance)
             .map(JWKVerificationMethod::new)
             .findFirst()
-            .orElseThrow();
+            .orElseThrow(
+                () ->
+                    new NoVerificationKeyFoundExcpetion(
+                        "No JWS verification Key found in DID Document"));
 
     var x = Base64URL.from(key.getPublicKeyJwk().getX());
 
