@@ -19,9 +19,13 @@
 
 package org.eclipse.tractusx.ssi.lib.model;
 
+import com.apicatalog.jsonld.loader.DocumentLoader;
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import java.net.URI;
 import java.util.*;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
@@ -30,8 +34,32 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 public abstract class JsonLdObject extends HashMap<String, Object> {
 
   public static final String CONTEXT = "@context";
+  @ToString.Exclude @Getter private DocumentLoader documentLoader;
 
   public JsonLdObject(Map<String, Object> json) {
+    super(json);
+
+    try {
+      // validate getters
+      Objects.requireNonNull(this.getContext());
+
+      // We need to convert context from URI to String.
+      // Because we can't serilize URI.
+      final List<String> contexts = new ArrayList<>();
+      for (URI o : this.getContext()) {
+        contexts.add(o.toString());
+      }
+      this.put(CONTEXT, contexts);
+
+      if (documentLoader == null) {}
+
+    } catch (Exception e) {
+      throw new IllegalArgumentException(
+          String.format("Invalid JsonLdObject: %s", SerializeUtil.toJson(json)), e);
+    }
+  }
+
+  public JsonLdObject(Map<String, Object> json, DocumentLoader documentLoader) {
     super(json);
 
     try {
@@ -41,6 +69,8 @@ public abstract class JsonLdObject extends HashMap<String, Object> {
       throw new IllegalArgumentException(
           String.format("Invalid JsonLdObject: %s", SerializeUtil.toJson(json)), e);
     }
+
+    this.documentLoader = documentLoader;
   }
 
   public List<URI> getContext() {
@@ -74,5 +104,9 @@ public abstract class JsonLdObject extends HashMap<String, Object> {
 
   public String toPrettyJson() {
     return SerializeUtil.toPrettyJson(this);
+  }
+
+  public synchronized JsonObject toJsonObject() {
+    return Json.createObjectBuilder(this).build();
   }
 }

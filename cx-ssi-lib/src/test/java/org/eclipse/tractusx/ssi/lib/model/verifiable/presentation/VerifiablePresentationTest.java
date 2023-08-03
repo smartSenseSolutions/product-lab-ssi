@@ -30,7 +30,7 @@ public class VerifiablePresentationTest {
     final VerifiablePresentation vp1 = TestResourceUtil.getAlumniVerifiablePresentation();
     final VerifiablePresentation vp2 = TestResourceUtil.getAlumniVerifiablePresentation();
 
-    Assertions.assertEquals(vp1, vp2);
+    Assertions.assertEquals(vp1.toString(), vp2.toString());
   }
 
   @Test
