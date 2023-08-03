@@ -14,22 +14,28 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *
+ *
+ *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
 package org.eclipse.tractusx.ssi.lib.proof.transform;
 
+import com.apicatalog.jsonld.JsonLd;
+import com.apicatalog.jsonld.JsonLdError;
+import com.apicatalog.jsonld.JsonLdOptions;
+import com.apicatalog.jsonld.api.ToRdfApi;
+import com.apicatalog.jsonld.document.JsonDocument;
+import com.apicatalog.jsonld.http.media.MediaType;
 import com.apicatalog.rdf.RdfDataset;
 import com.apicatalog.rdf.io.nquad.NQuadsWriter;
-import foundation.identity.jsonld.ConfigurableDocumentLoader;
-import foundation.identity.jsonld.JsonLDException;
-import foundation.identity.jsonld.JsonLDObject;
 import io.setl.rdf.normalization.RdfNormalize;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
+import org.eclipse.tractusx.ssi.lib.model.RemoteDocumentLoader;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 
 public class LinkedDataTransformer {
@@ -41,25 +47,7 @@ public class LinkedDataTransformer {
 
     try {
 
-      var properties = new HashMap<>(copyCredential);
-      properties.remove(VerifiableCredential.CONTEXT);
-      properties.remove(VerifiableCredential.TYPE);
-      properties.remove(VerifiableCredential.ID);
-      var jsonLdCredential =
-          JsonLDObject.builder()
-              .id(credential.getId())
-              .contexts(credential.getContext())
-              .types(credential.getTypes())
-              .properties(properties)
-              .build();
-
-      var documentLoader = new ConfigurableDocumentLoader();
-      documentLoader.setEnableHttps(true);
-      documentLoader.setEnableLocalCache(true);
-      documentLoader.setHttpsContexts(credential.getContext());
-      jsonLdCredential.setDocumentLoader(documentLoader);
-
-      RdfDataset rdfDataset = jsonLdCredential.toDataset();
+      RdfDataset rdfDataset = toDataset(copyCredential);
       rdfDataset = RdfNormalize.normalize(rdfDataset, "urdna2015");
       StringWriter stringWriter = new StringWriter();
       NQuadsWriter nQuadsWriter = new NQuadsWriter(stringWriter);
@@ -68,12 +56,30 @@ public class LinkedDataTransformer {
 
       return new TransformedLinkedData(normalized);
 
-    } catch (JsonLDException e) {
-      throw new RuntimeException(e); // TODO
     } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException(e); // TODO
+      throw new RuntimeException(e);
     } catch (IOException e) {
-      throw new RuntimeException(e); // TODO
+      throw new RuntimeException(e);
+    }
+  }
+
+  private RdfDataset toDataset(JsonLdObject jsonLdObject) throws RuntimeException {
+
+    var documentLoader = new RemoteDocumentLoader();
+    documentLoader.setEnableHttps(true);
+    documentLoader.setHttpsContexts(jsonLdObject.getContext());
+
+    JsonLdOptions options = new JsonLdOptions();
+    options.setDocumentLoader(documentLoader);
+    options.setOrdered(true);
+
+    JsonDocument jsonDocument = JsonDocument.of(MediaType.JSON_LD, jsonLdObject.toJsonObject());
+    ToRdfApi toRdfApi = JsonLd.toRdf(jsonDocument);
+    toRdfApi.options(options);
+    try {
+      return toRdfApi.get();
+    } catch (JsonLdError ex) {
+      throw new RuntimeException(ex);
     }
   }
 }

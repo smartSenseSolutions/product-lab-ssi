@@ -17,28 +17,12 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-package org.eclipse.tractusx.ssi.lib.serialization.jwt;
+package org.eclipse.tractusx.ssi.lib.exception;
 
-import java.util.Map;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.DanubeTechMapper;
+/** NoVerificationKeyFoundExcpetion */
+public class NoVerificationKeyFoundExcpetion extends Exception {
 
-public class DanubTechVerifiableCredentialSerializerImpl implements VerifiableCredentialSerializer {
-  @Override
-  public VerifiableCredential deserialize(Map<String, Object> credentialJson) {
-
-    final com.danubetech.verifiablecredentials.VerifiableCredential dtCredential =
-        com.danubetech.verifiablecredentials.VerifiableCredential.fromMap(credentialJson);
-
-    return DanubeTechMapper.map(dtCredential);
-  }
-
-  @Override
-  public String serialize(VerifiableCredential credential) {
-
-    final com.danubetech.verifiablecredentials.VerifiableCredential dtCredential =
-        DanubeTechMapper.map(credential);
-
-    return dtCredential.toJson(true);
+  public NoVerificationKeyFoundExcpetion(String message) {
+    super(message);
   }
 }

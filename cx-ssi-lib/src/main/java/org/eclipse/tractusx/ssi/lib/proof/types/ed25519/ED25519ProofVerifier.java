@@ -32,6 +32,7 @@ import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
+import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
@@ -51,7 +52,7 @@ public class ED25519ProofVerifier implements IVerifier {
 
   public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
       throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
-          InvalidePublicKeyFormat {
+          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion {
 
     final URI issuer = credential.getIssuer();
     final Did issuerDid = DidParser.parse(issuer);
@@ -73,7 +74,10 @@ public class ED25519ProofVerifier implements IVerifier {
             .filter(Ed25519VerificationMethod::isInstance)
             .map(Ed25519VerificationMethod::new)
             .findFirst()
-            .orElseThrow();
+            .orElseThrow(
+                () ->
+                    new NoVerificationKeyFoundExcpetion(
+                        "No Ed25519 verification key found in DID Document"));
 
     // final MultibaseString publicKey = key.getPublicKeyBase58();
     IPublicKey publicKey;
