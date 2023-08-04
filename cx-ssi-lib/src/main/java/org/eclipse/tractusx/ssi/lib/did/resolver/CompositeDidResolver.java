@@ -23,55 +23,54 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 
 /**
- * Implements a {@code DidResolver} that can chain multiple other
- * {@code DidResolver} implementations. The resolvers are executed in the same
- * order as there were specified in the constructor. The execution stops when a
- * resolver returns a DID document, all subsequent resolvers are skipped.
- * Likewise, a resolver is skipped if it indicates that it cannot resolve the
- * provided DID or fails to return a DID document.
+ * Implements a {@code DidResolver} that can chain multiple other {@code DidResolver}
+ * implementations. The resolvers are executed in the same order as there were specified in the
+ * constructor. The execution stops when a resolver returns a DID document, all subsequent resolvers
+ * are skipped. Likewise, a resolver is skipped if it indicates that it cannot resolve the provided
+ * DID or fails to return a DID document.
  */
 public class CompositeDidResolver implements DidResolver {
-	DidResolver[] didResolvers;
+  DidResolver[] didResolvers;
 
-	public CompositeDidResolver(DidResolver... didResolvers) {
-		this.didResolvers = didResolvers;
-	}
+  public CompositeDidResolver(DidResolver... didResolvers) {
+    this.didResolvers = didResolvers;
+  }
 
-	@Override
-	public DidDocument resolve(Did did) throws DidResolverException {
-		for (DidResolver didResolver : didResolvers) {
-			if (didResolver.isResolvable(did)) {
-				try {
-					DidDocument result = didResolver.resolve(did);
-					if (result != null) {
-						return result;
-					}
-				} catch (DidResolverException dre) {
-					throw dre;
-				} catch (Throwable th) {
-					// catch any other exception and re-throw wrapped as DidResolverException
-					throw new DidResolverException(String.format("Unrecognized exception: %s", th.getClass().getName()),
-							th);
-				}
-			}
-		}
-		return null;
-	}
+  @Override
+  public DidDocument resolve(Did did) throws DidResolverException {
+    for (DidResolver didResolver : didResolvers) {
+      if (didResolver.isResolvable(did)) {
+        try {
+          DidDocument result = didResolver.resolve(did);
+          if (result != null) {
+            return result;
+          }
+        } catch (DidResolverException dre) {
+          throw dre;
+        } catch (Throwable th) {
+          // catch any other exception and re-throw wrapped as DidResolverException
+          throw new DidResolverException(
+              String.format("Unrecognized exception: %s", th.getClass().getName()), th);
+        }
+      }
+    }
+    return null;
+  }
 
-	@Override
-	public boolean isResolvable(Did did) {
-		return Arrays.stream(didResolvers).anyMatch(resolver -> resolver.isResolvable(did));
-	}
+  @Override
+  public boolean isResolvable(Did did) {
+    return Arrays.stream(didResolvers).anyMatch(resolver -> resolver.isResolvable(did));
+  }
 
-	/**
-	 * Constructs a new {@code CompositeDidResolver} by appending the {@code toBeAppended} resolver 
-	 * to the {@target} resolver.
-	 * 
-	 * @param target the {@code DidResolver} to append the other to
-	 * @param toBeAppended the {@code DidResolver} to be appended
-	 * @return a {@code CompositeDidResolver} instance
-	 */
-	public static CompositeDidResolver append(DidResolver target, DidResolver toBeAppended) {
-		return new CompositeDidResolver(target, toBeAppended);
-	}
+  /**
+   * Constructs a new {@code CompositeDidResolver} by appending the {@code toBeAppended} resolver to
+   * the {@target} resolver.
+   *
+   * @param target the {@code DidResolver} to append the other to
+   * @param toBeAppended the {@code DidResolver} to be appended
+   * @return a {@code CompositeDidResolver} instance
+   */
+  public static CompositeDidResolver append(DidResolver target, DidResolver toBeAppended) {
+    return new CompositeDidResolver(target, toBeAppended);
+  }
 }

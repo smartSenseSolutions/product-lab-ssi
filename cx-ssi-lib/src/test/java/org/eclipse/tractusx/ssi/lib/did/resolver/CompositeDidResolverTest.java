@@ -121,20 +121,20 @@ public class CompositeDidResolverTest {
 
   @Test
   public void shouldConstructCompositeResolverUsingStaticMethod() throws DidResolverException {
-	    when(resolver1.isResolvable(any())).thenReturn(true);
-	    when(resolver1.resolve(any())).thenReturn(RESOLVED_DID_DOC);
+    when(resolver1.isResolvable(any())).thenReturn(true);
+    when(resolver1.resolve(any())).thenReturn(RESOLVED_DID_DOC);
 
-	    DidResolver resolver = CompositeDidResolver.append(resolver1, resolver2);
-	    resolver.resolve(DID);
-	    verify(resolver1, times(1)).resolve(any());
-	    verify(resolver2, never()).resolve(any());
+    DidResolver resolver = CompositeDidResolver.append(resolver1, resolver2);
+    resolver.resolve(DID);
+    verify(resolver1, times(1)).resolve(any());
+    verify(resolver2, never()).resolve(any());
 
-	    when(resolver1.isResolvable(any())).thenReturn(false);
-	    when(resolver2.isResolvable(any())).thenReturn(true);
-	    when(resolver2.resolve(any())).thenReturn(RESOLVED_DID_DOC);
+    when(resolver1.isResolvable(any())).thenReturn(false);
+    when(resolver2.isResolvable(any())).thenReturn(true);
+    when(resolver2.resolve(any())).thenReturn(RESOLVED_DID_DOC);
 
-	    resolver.resolve(DID);
-	    verify(resolver1, times(1)).resolve(any());
-	    verify(resolver2, times(1)).resolve(any());
+    resolver.resolve(DID);
+    verify(resolver1, times(1)).resolve(any());
+    verify(resolver2, times(1)).resolve(any());
   }
 }

@@ -62,6 +62,11 @@ public class VerifiablePresentation extends JsonLdObject {
     return SerializeUtil.asStringList(this.get(TYPE));
   }
 
+  public static VerifiablePresentation fromJson(String json) {
+    var map = SerializeUtil.fromJson(json);
+    return new VerifiablePresentation(map);
+  }
+
   @NonNull
   public List<VerifiableCredential> getVerifiableCredentials() {
     final List<Map<String, Object>> credentials =
