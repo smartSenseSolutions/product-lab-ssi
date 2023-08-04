@@ -22,21 +22,16 @@ package org.eclipse.tractusx.ssi.lib.util.identity;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistryImpl;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
-import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
-@Deprecated
-/** Remove when {@code DidDocumentResolver} is removed. */
-public class TestDidDocumentResolver implements DidDocumentResolver {
+public class TestDidResolver implements DidResolver {
   private final Map<Did, DidDocument> documents = new HashMap<>();
 
   @Override
-  public DidMethod getSupportedMethod() {
-    return TestDidFactory.DID_METHOD;
+  public boolean isResolvable(Did did) {
+    return TestDidFactory.DID_METHOD.equals(did.getMethod());
   }
 
   @Override
@@ -56,11 +51,5 @@ public class TestDidDocumentResolver implements DidDocumentResolver {
 
   public void register(TestIdentity testIdentity) {
     documents.put(testIdentity.getDid(), testIdentity.getDidDocument());
-  }
-
-  public DidDocumentResolverRegistry withRegistry() {
-    final DidDocumentResolverRegistry registry = new DidDocumentResolverRegistryImpl();
-    registry.register(this);
-    return registry;
   }
 }

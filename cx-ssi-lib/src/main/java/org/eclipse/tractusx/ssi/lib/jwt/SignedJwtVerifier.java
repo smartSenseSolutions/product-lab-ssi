@@ -31,13 +31,18 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedVerificationMethodException;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
-import org.eclipse.tractusx.ssi.lib.model.did.*;
+import org.eclipse.tractusx.ssi.lib.model.did.Did;
+import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
+import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
+import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethod;
+import org.eclipse.tractusx.ssi.lib.model.did.VerificationMethod;
 
 /**
  * Convenience/helper class to verify Signed JSON Web Tokens (JWTs) for communicating between
@@ -46,7 +51,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.*;
 @RequiredArgsConstructor
 public class SignedJwtVerifier {
 
-  private final DidDocumentResolverRegistry didDocumentResolverRegistry;
+  private final DidResolver didResolver;
 
   /**
    * Verifies a VerifiableCredential using the issuer's public key
@@ -54,7 +59,7 @@ public class SignedJwtVerifier {
    * @param jwt a {@link SignedJWT} that was sent by the claiming party.
    * @return true if verified, false otherwise
    */
-  @SneakyThrows({JOSEException.class})
+  @SneakyThrows({JOSEException.class, DidResolverException.class})
   public boolean verify(SignedJWT jwt)
       throws JwtException, DidDocumentResolverNotRegisteredException {
 
@@ -68,10 +73,7 @@ public class SignedJwtVerifier {
     final String issuer = jwtClaimsSet.getIssuer();
     final Did issuerDid = DidParser.parse(issuer);
 
-    final DidDocumentResolver didDocumentResolver;
-    didDocumentResolver = didDocumentResolverRegistry.get(issuerDid.getMethod());
-
-    final DidDocument issuerDidDocument = didDocumentResolver.resolve(issuerDid);
+    final DidDocument issuerDidDocument = didResolver.resolve(issuerDid);
     final List<VerificationMethod> verificationMethods = issuerDidDocument.getVerificationMethods();
 
     // verify JWT signature

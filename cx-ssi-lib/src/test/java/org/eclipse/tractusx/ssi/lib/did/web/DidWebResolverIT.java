@@ -41,6 +41,7 @@ import org.testcontainers.utility.MountableFile;
 @Testcontainers
 public class DidWebResolverIT {
   private DidWebResolver resolver;
+  private DidWebResolver httpsResolver;
 
   @Container
   public static NginxContainer<?> nginx =
@@ -53,6 +54,7 @@ public class DidWebResolverIT {
   @BeforeEach
   public void initEach() {
     resolver = new DidWebResolver(HttpClient.newHttpClient(), new DidWebParser(), false);
+    httpsResolver = new DidWebResolver(HttpClient.newHttpClient(), new DidWebParser(), true);
   }
 
   @Test
@@ -64,5 +66,14 @@ public class DidWebResolverIT {
     assertTrue(resolver.isResolvable(validDidWeb));
     DidDocument actualDidDoc = resolver.resolve(validDidWeb);
     assertEquals(new DidDocument(TestResourceUtil.getPublishedDidDocument()), actualDidDoc);
+  }
+
+  @Test
+  public void shouldResolveValidExternalWebDid() throws DidResolverException {
+    final String didIdentifier = "did.actor:alice";
+    Did validDidWeb = new Did(new DidMethod("web"), new DidMethodIdentifier(didIdentifier));
+    assertTrue(httpsResolver.isResolvable(validDidWeb));
+    DidDocument actualDidDoc = httpsResolver.resolve(validDidWeb);
+    assertEquals("did:web:" + didIdentifier, actualDidDoc.get("id"));
   }
 }

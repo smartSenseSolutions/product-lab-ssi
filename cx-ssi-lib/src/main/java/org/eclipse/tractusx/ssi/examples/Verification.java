@@ -21,8 +21,7 @@ package org.eclipse.tractusx.ssi.examples;
 
 import com.nimbusds.jwt.SignedJWT;
 import java.net.http.HttpClient;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistryImpl;
-import org.eclipse.tractusx.ssi.lib.did.web.DidWebDocumentResolver;
+import org.eclipse.tractusx.ssi.lib.did.web.DidWebResolver;
 import org.eclipse.tractusx.ssi.lib.did.web.util.DidWebParser;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.JwtException;
@@ -34,52 +33,43 @@ import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 public class Verification {
 
   public static void verifyJWT(SignedJWT jwt) {
-    // DID Resolver Constracture params
+    // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
     var enforceHttps = false;
+    var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
 
-    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-    didDocumentResolverRegistry.register(
-        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
-
-    SignedJwtVerifier jwtVerifier = new SignedJwtVerifier(didDocumentResolverRegistry);
+    SignedJwtVerifier jwtVerifier = new SignedJwtVerifier(didResolver);
     try {
       jwtVerifier.verify(jwt);
     } catch (JwtException | DidDocumentResolverNotRegisteredException e) {
-      // An ecxeption will be thrown here in case JWT verification failed or DID
+      // An exception will be thrown here in case JWT verification failed or DID
       // Document Resolver not able to resolve.
       e.printStackTrace();
     }
   }
 
   public static boolean verifyED21559LD(VerifiableCredential verifiableCredential) {
-    // DID Resolver Constracture params
+    // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
     var enforceHttps = false;
-
-    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-    didDocumentResolverRegistry.register(
-        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+    var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
 
     LinkedDataProofValidation proofValidation =
-        LinkedDataProofValidation.newInstance(SignatureType.ED21559, didDocumentResolverRegistry);
-    return proofValidation.verifiyProof(verifiableCredential);
+        LinkedDataProofValidation.newInstance(SignatureType.ED21559, didResolver);
+    return proofValidation.verifyProof(verifiableCredential);
   }
 
   public static boolean verifyJWSLD(VerifiableCredential verifiableCredential) {
-    // DID Resolver Constracture params
+    // DID Resolver constructor params
     DidWebParser didParser = new DidWebParser();
     var httpClient = HttpClient.newHttpClient();
     var enforceHttps = false;
-
-    var didDocumentResolverRegistry = new DidDocumentResolverRegistryImpl();
-    didDocumentResolverRegistry.register(
-        new DidWebDocumentResolver(httpClient, didParser, enforceHttps));
+    var didResolver = new DidWebResolver(httpClient, didParser, enforceHttps);
 
     LinkedDataProofValidation proofValidation =
-        LinkedDataProofValidation.newInstance(SignatureType.JWS, didDocumentResolverRegistry);
-    return proofValidation.verifiyProof(verifiableCredential);
+        LinkedDataProofValidation.newInstance(SignatureType.JWS, didResolver);
+    return proofValidation.verifyProof(verifiableCredential);
   }
 }
