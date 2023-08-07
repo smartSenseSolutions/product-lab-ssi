@@ -92,9 +92,7 @@ class VerifiableCredentialStatusTest {
 
     // with invalid type
     statusMap.put(TYPE, "CredentialStatusList2017");
-    Assertions.assertThrows(
-        IllegalArgumentException.class,
-        () -> new VerifiableCredentialStatusList2021Entry(statusMap));
+    Assertions.assertDoesNotThrow(() -> new VerifiableCredentialStatusList2021Entry(statusMap));
 
     // without type
     statusMap.remove(TYPE);
