@@ -19,13 +19,15 @@
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.net.URI;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import lombok.*;
+import lombok.NonNull;
+import lombok.ToString;
 import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
@@ -59,26 +61,29 @@ public class VerifiableCredential extends JsonLdObject {
   public static final String CREDENTIAL_SUBJECT = "credentialSubject";
   public static final String PROOF = "proof";
 
+  public static final String CREDENTIAL_STATUS = "credentialStatus";
+
+  @JsonCreator
   public VerifiableCredential(Map<String, Object> json) {
     super(json);
 
     try {
       // validate getters
-      Objects.requireNonNull(this.getId());
-      Objects.requireNonNull(this.getTypes());
-      Objects.requireNonNull(this.getIssuer());
-      Objects.requireNonNull(this.getIssuanceDate());
-      Objects.requireNonNull(this.getCredentialSubject());
-      this.getExpirationDate();
-      this.getProof();
-
+      Objects.requireNonNull(getId());
+      Objects.requireNonNull(getTypes());
+      Objects.requireNonNull(getIssuer());
+      Objects.requireNonNull(getIssuanceDate());
+      Objects.requireNonNull(getCredentialSubject());
+      getExpirationDate();
+      getProof();
+      getVerifiableCredentialStatus();
       // there exists an error that prevents quads from being created correctly.
       // as this interferes with the credential signature, this is a security risk
       // see https://github.com/eclipse-tractusx/SSI-agent-lib/issues/4
       // as workaround we ensure that the credential ID starts with one or more letters followed by
       // a colon
       final String regex = "^[a-zA-Z]+:.*$";
-      if (!this.getId().toString().matches(regex)) {
+      if (!getId().toString().matches(regex)) {
         throw new IllegalArgumentException(
             String.format(
                 "Invalid VerifiableCredential. Credential ID must start with one or more letters followed by a colon. This is a temporary mitigation for the following security risk: %s",
@@ -89,41 +94,46 @@ public class VerifiableCredential extends JsonLdObject {
           String.format("Invalid VerifiableCredential: %s", SerializeUtil.toJson(json)), e);
     }
 
-    if (this.getCredentialSubject().isEmpty())
+    if (getCredentialSubject().isEmpty()) {
       throw new IllegalArgumentException(
           String.format(
               "Invalid VerifiableCredential. CredentialSubject must not be empty: %s",
               SerializeUtil.toJson(json)));
+    }
+
+    // validate status list if provided
   }
 
   @NonNull
   public URI getId() {
-    return SerializeUtil.asURI(this.get(ID));
+    return SerializeUtil.asURI(get(ID));
   }
 
   @NonNull
   public List<String> getTypes() {
-    return (List<String>) this.get(TYPE);
+    return (List<String>) get(TYPE);
   }
 
   @NonNull
   public URI getIssuer() {
-    return SerializeUtil.asURI(this.get(ISSUER));
+    return SerializeUtil.asURI(get(ISSUER));
   }
 
   @NonNull
   public Instant getIssuanceDate() {
-    return Instant.parse((String) this.get(ISSUANCE_DATE));
+    return Instant.parse((String) get(ISSUANCE_DATE));
   }
 
   public Instant getExpirationDate() {
-    if (!this.containsKey(EXPIRATION_DATE)) return null;
-    return Instant.parse((String) this.get(EXPIRATION_DATE));
+    if (!containsKey(EXPIRATION_DATE)) {
+      return null;
+    }
+    return Instant.parse((String) get(EXPIRATION_DATE));
   }
 
   @NonNull
   public List<VerifiableCredentialSubject> getCredentialSubject() {
-    final Object subject = this.get(CREDENTIAL_SUBJECT);
+    Object subject = get(CREDENTIAL_SUBJECT);
 
     if (subject instanceof List) {
       return ((List<Map<String, Object>>) subject)
@@ -138,26 +148,53 @@ public class VerifiableCredential extends JsonLdObject {
     }
   }
 
+  public VerifiableCredentialStatus getVerifiableCredentialStatus() {
+    Object data = get(CREDENTIAL_STATUS);
+    if (data == null) {
+      return null;
+    }
+    Object type = ((Map<String, Object>) data).get(TYPE);
+    if (Objects.isNull(type)) {
+      throw new IllegalArgumentException("Status type not found");
+    }
+    if (type.toString().equals(VerifiableCredentialStatusList2021Entry.STATUS_LIST_2021_ENTRY)) {
+      return new VerifiableCredentialStatusList2021Entry((Map<String, Object>) data);
+    } else {
+      Map<String, Object> map = (Map<String, Object>) data;
+      return new VerifiableCredentialStatus(map) {
+        @Override
+        public String getType() {
+          if (map.containsKey(TYPE)) {
+            return map.get(TYPE).toString();
+          } else {
+            throw new IllegalArgumentException("Status type not found");
+          }
+        }
+      };
+    }
+  }
+
   public Proof getProof() {
-    final Object subject = this.get(PROOF);
-    if (subject == null) {
+    Object proof = get(PROOF);
+    if (proof == null) {
       return null;
     }
 
-    return new Proof((Map<String, Object>) subject);
+    return new Proof((Map<String, Object>) proof);
   }
 
   public VerifiableCredential removeProof() {
 
     VerifiableCredentialBuilder builder = new VerifiableCredentialBuilder();
     return builder
-        .id(this.getId())
-        .context(this.getContext())
-        .credentialSubject(this.getCredentialSubject())
-        .expirationDate(this.getExpirationDate())
-        .issuanceDate(this.getIssuanceDate())
-        .issuer(this.getIssuer())
-        .type(this.getTypes())
+        .id(getId())
+        .context(getContext())
+        .credentialSubject(getCredentialSubject())
+        .expirationDate(getExpirationDate())
+        .issuanceDate(getIssuanceDate())
+        .issuer(getIssuer())
+        .type(getTypes())
+        .verifiableCredentialStatus(getVerifiableCredentialStatus())
         .build();
   }
 }
