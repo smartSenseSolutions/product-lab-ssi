@@ -48,6 +48,7 @@ public abstract class VerifiableCredentialStatus extends LinkedHashMap<String, O
     try {
       // validate
       getId();
+      getType();
     } catch (Exception e) {
       throw new IllegalArgumentException(
           String.format("Invalid VerifiableCredentialStatus: %s", SerializeUtil.toJson(json)), e);
