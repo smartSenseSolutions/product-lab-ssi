@@ -19,6 +19,7 @@
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.net.URI;
 import java.time.Instant;
 import java.util.List;
@@ -62,6 +63,7 @@ public class VerifiableCredential extends JsonLdObject {
 
   public static final String CREDENTIAL_STATUS = "credentialStatus";
 
+  @JsonCreator
   public VerifiableCredential(Map<String, Object> json) {
     super(json);
 
@@ -155,10 +157,21 @@ public class VerifiableCredential extends JsonLdObject {
     if (Objects.isNull(type)) {
       throw new IllegalArgumentException("Status type not found");
     }
-    if (!type.toString().equals(VerifiableCredentialStatusList2021Entry.STATUS_LIST_2021_ENTRY)) {
-      throw new IllegalArgumentException("only StatusList2021Entry type is supported");
+    if (type.toString().equals(VerifiableCredentialStatusList2021Entry.STATUS_LIST_2021_ENTRY)) {
+      return new VerifiableCredentialStatusList2021Entry((Map<String, Object>) data);
+    } else {
+      Map<String, Object> map = (Map<String, Object>) data;
+      return new VerifiableCredentialStatus(map) {
+        @Override
+        public String getType() {
+          if (map.containsKey(TYPE)) {
+            return map.get(TYPE).toString();
+          } else {
+            throw new IllegalArgumentException("Status type not found");
+          }
+        }
+      };
     }
-    return new VerifiableCredentialStatusList2021Entry((Map<String, Object>) data);
   }
 
   public Proof getProof() {

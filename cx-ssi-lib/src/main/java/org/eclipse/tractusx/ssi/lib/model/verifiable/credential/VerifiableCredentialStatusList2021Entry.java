@@ -56,7 +56,6 @@ public class VerifiableCredentialStatusList2021Entry extends VerifiableCredentia
   public VerifiableCredentialStatusList2021Entry(Map<String, Object> json) {
     super(json);
     try {
-      getType();
       getStatusPurpose();
       getStatusListIndex();
       getStatusListCredential();
@@ -119,11 +118,7 @@ public class VerifiableCredentialStatusList2021Entry extends VerifiableCredentia
     if (Objects.isNull(object)) {
       throw new IllegalArgumentException("Status type not found");
     } else {
-      String type = object.toString();
-      if (!type.equals(STATUS_LIST_2021_ENTRY)) {
-        throw new IllegalArgumentException(type + " is not supported");
-      }
-      return type;
+      return object.toString();
     }
   }
 }
