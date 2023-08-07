@@ -23,7 +23,7 @@ SPDX-License-Identifier: Apache-2.0
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.tractusx.ssi</groupId>
-    <version>0.0.14</version>
+    <version>0.0.15</version>
     <packaging>jar</packaging>
 
 
@@ -313,7 +313,7 @@ SPDX-License-Identifier: Apache-2.0
         <!-- Eclipse Dash Tool to generate DEPENDENCIES file -->
         <pluginRepository>
             <id>dash-licenses-snapshots</id>
-            <url>https://repo.eclipse.org/content/repositories/dash-licenses-releases/</url>
+            <url>https://repo.eclipse.org/content/repositories/dash-licenses-releases /</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>

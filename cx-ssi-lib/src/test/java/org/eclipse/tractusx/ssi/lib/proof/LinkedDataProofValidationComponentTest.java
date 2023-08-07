@@ -70,18 +70,17 @@ public class LinkedDataProofValidationComponentTest {
     // prepare key
     // 0 == ED21559
     // 1 == JWS
-    final URI verificationMethod =
+    URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
 
-    final VerifiableCredential credential =
+    VerifiableCredential credential =
         TestCredentialFactory.createCredential(credentialIssuer, null);
 
-    final Proof proof =
+    Proof proof =
         linkedDataProofGenerator.createProof(
             credential, verificationMethod, credentialIssuer.getPrivateKey());
 
-    final VerifiableCredential credentialWithProof =
-        TestCredentialFactory.attachProof(credential, proof);
+    VerifiableCredential credentialWithProof = TestCredentialFactory.attachProof(credential, proof);
 
     DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern(VerifiableCredential.TIME_FORMAT).withZone(ZoneOffset.UTC);
@@ -114,18 +113,17 @@ public class LinkedDataProofValidationComponentTest {
     // prepare key
     // 0 == ED21559
     // 1 == JWS
-    final URI verificationMethod =
+    URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
 
-    final VerifiableCredential credential =
+    VerifiableCredential credential =
         TestCredentialFactory.createCredential(credentialIssuer, null);
 
-    final Proof proof =
+    Proof proof =
         linkedDataProofGenerator.createProof(
             credential, verificationMethod, credentialIssuer.getPrivateKey());
 
-    final VerifiableCredential credentialWithProof =
-        TestCredentialFactory.attachProof(credential, proof);
+    VerifiableCredential credentialWithProof = TestCredentialFactory.attachProof(credential, proof);
 
     var isOk = linkedDataProofValidation.verifyProof(credentialWithProof);
 
@@ -151,19 +149,18 @@ public class LinkedDataProofValidationComponentTest {
     // prepare key
     // 0 == ED21559
     // 1 == JWS
-    final URI verificationMethod =
+    URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(1).getId();
 
-    final VerifiableCredential credential =
+    VerifiableCredential credential =
         TestCredentialFactory.createCredential(credentialIssuer, null);
 
-    final JWSSignature2020 proof =
+    JWSSignature2020 proof =
         (JWSSignature2020)
             linkedDataProofGenerator.createProof(
                 credential, verificationMethod, credentialIssuer.getPrivateKey());
 
-    final VerifiableCredential credentialWithProof =
-        TestCredentialFactory.attachProof(credential, proof);
+    VerifiableCredential credentialWithProof = TestCredentialFactory.attachProof(credential, proof);
 
     var isOk = linkedDataProofValidation.verifyProof(credentialWithProof);
 
