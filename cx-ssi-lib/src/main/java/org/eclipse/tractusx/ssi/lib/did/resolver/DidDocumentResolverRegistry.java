@@ -22,6 +22,9 @@ package org.eclipse.tractusx.ssi.lib.did.resolver;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
+/**
+ * @deprecated replaced by {@link DidResolver}
+ */
 public interface DidDocumentResolverRegistry {
   DidDocumentResolver get(DidMethod did) throws DidDocumentResolverNotRegisteredException;
 
