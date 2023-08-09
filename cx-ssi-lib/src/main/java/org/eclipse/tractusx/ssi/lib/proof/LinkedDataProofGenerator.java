@@ -71,7 +71,7 @@ public class LinkedDataProofGenerator {
 
       final MultibaseString multibaseString = MultibaseFactory.create(signature);
       return new Ed25519Signature2020Builder()
-          .proofPurpose(Ed25519Signature2020.PROOF_PURPOSE)
+          .proofPurpose(Ed25519Signature2020.ASSERTION_METHOD)
           .proofValue(multibaseString.getEncoded())
           .verificationMethod(verificationMethodId)
           .created(Instant.now())
@@ -79,7 +79,7 @@ public class LinkedDataProofGenerator {
     } else {
 
       return new JWSSignature2020Builder()
-          .proofPurpose(JWSSignature2020.PROOF_PURPOSE)
+          .proofPurpose(JWSSignature2020.ASSERTION_METHOD)
           .proofValue(new String(signature, StandardCharsets.UTF_8))
           .verificationMethod(verificationMethodId)
           .created(Instant.now())
