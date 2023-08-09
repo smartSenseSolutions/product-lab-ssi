@@ -32,8 +32,8 @@ import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
@@ -51,8 +51,9 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 @RequiredArgsConstructor
 public class JWSProofVerifier implements IVerifier {
 
-  private final DidDocumentResolverRegistry didDocumentResolverRegistry;
+  private final DidResolver didResolver;
 
+  @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
       throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
           NoVerificationKeyFoundExcpetion {
@@ -60,10 +61,7 @@ public class JWSProofVerifier implements IVerifier {
     final URI issuer = credential.getIssuer();
     final Did issuerDid = DidParser.parse(issuer);
 
-    final DidDocumentResolver didDocumentResolver;
-    didDocumentResolver = didDocumentResolverRegistry.get(issuerDid.getMethod());
-
-    final DidDocument document = didDocumentResolver.resolve(issuerDid);
+    final DidDocument document = didResolver.resolve(issuerDid);
 
     final Proof proof = credential.getProof();
     if (!proof.getType().equals(JWSSignature2020.JWS_VERIFICATION_KEY_2020)) {

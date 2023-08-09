@@ -31,7 +31,7 @@ import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
-import org.eclipse.tractusx.ssi.lib.util.identity.TestDidDocumentResolver;
+import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.eclipse.tractusx.ssi.lib.util.vc.TestCredentialFactory;
@@ -45,7 +45,7 @@ public class LinkedDataProofValidationComponentTest {
   private LinkedDataProofGenerator linkedDataProofGenerator;
 
   private TestIdentity credentialIssuer;
-  private TestDidDocumentResolver didDocumentResolver;
+  private TestDidResolver didResolver;
 
   @BeforeEach
   public void setup() {}
@@ -55,18 +55,17 @@ public class LinkedDataProofValidationComponentTest {
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           KeyGenerationException {
     SsiLibrary.initialize();
-    didDocumentResolver = new TestDidDocumentResolver();
+    this.didResolver = new TestDidResolver();
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
-    didDocumentResolver.register(credentialIssuer);
+    didResolver.register(credentialIssuer);
 
     // Generator
     linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
 
     // Verification
     linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(
-            SignatureType.ED21559, didDocumentResolver.withRegistry());
+        LinkedDataProofValidation.newInstance(SignatureType.ED21559, didResolver);
 
     // prepare key
     // 0 == ED21559
@@ -89,7 +88,7 @@ public class LinkedDataProofValidationComponentTest {
         VerifiableCredential.EXPIRATION_DATE,
         formatter.format(Instant.now().plusSeconds(60 * 60 * 24 * 365 * 10)));
 
-    var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
+    var isOk = linkedDataProofValidation.verifyProof(credentialWithProof);
 
     Assertions.assertFalse(isOk);
   }
@@ -99,18 +98,17 @@ public class LinkedDataProofValidationComponentTest {
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           KeyGenerationException {
     SsiLibrary.initialize();
-    didDocumentResolver = new TestDidDocumentResolver();
+    this.didResolver = new TestDidResolver();
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
-    didDocumentResolver.register(credentialIssuer);
+    didResolver.register(credentialIssuer);
 
     // Generator
     linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
 
     // Verification
     linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(
-            SignatureType.ED21559, didDocumentResolver.withRegistry());
+        LinkedDataProofValidation.newInstance(SignatureType.ED21559, didResolver);
 
     // prepare key
     // 0 == ED21559
@@ -127,7 +125,7 @@ public class LinkedDataProofValidationComponentTest {
 
     VerifiableCredential credentialWithProof = TestCredentialFactory.attachProof(credential, proof);
 
-    var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
+    var isOk = linkedDataProofValidation.verifyProof(credentialWithProof);
 
     Assertions.assertTrue(isOk);
   }
@@ -137,17 +135,16 @@ public class LinkedDataProofValidationComponentTest {
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           KeyGenerationException {
     SsiLibrary.initialize();
-    didDocumentResolver = new TestDidDocumentResolver();
+    this.didResolver = new TestDidResolver();
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
-    didDocumentResolver.register(credentialIssuer);
+    didResolver.register(credentialIssuer);
 
     // Generator
     linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
     // Verifier
     linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(
-            SignatureType.JWS, didDocumentResolver.withRegistry());
+        LinkedDataProofValidation.newInstance(SignatureType.JWS, didResolver);
 
     // prepare key
     // 0 == ED21559
@@ -165,7 +162,7 @@ public class LinkedDataProofValidationComponentTest {
 
     VerifiableCredential credentialWithProof = TestCredentialFactory.attachProof(credential, proof);
 
-    var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
+    var isOk = linkedDataProofValidation.verifyProof(credentialWithProof);
 
     Assertions.assertTrue(isOk);
   }

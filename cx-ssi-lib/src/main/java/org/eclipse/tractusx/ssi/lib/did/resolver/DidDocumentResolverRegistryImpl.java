@@ -25,6 +25,9 @@ import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredEx
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
+/**
+ * @deprecated replaced by {@link DidResolver}
+ */
 public class DidDocumentResolverRegistryImpl implements DidDocumentResolverRegistry {
 
   private final Map<DidMethod, DidDocumentResolver> resolvers = new HashMap<>();
