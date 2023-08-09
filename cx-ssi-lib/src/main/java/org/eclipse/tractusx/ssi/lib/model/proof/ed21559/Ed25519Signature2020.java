@@ -39,6 +39,7 @@ public class Ed25519Signature2020 extends Proof {
   public static final String ED25519_VERIFICATION_KEY_2018 = "Ed25519Signature2020";
   public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
+  public static final String ASSERTION_METHOD = "assertionMethod";
   public static final String PROOF_PURPOSE = "proofPurpose";
   public static final String PROOF_VALUE = "proofValue";
   public static final String CREATED = "created";

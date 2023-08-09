@@ -37,6 +37,7 @@ public class JWSSignature2020 extends Proof {
   public static final String JWS_VERIFICATION_KEY_2020 = "JsonWebSignature2020";
   public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
+  public static final String ASSERTION_METHOD = "assertionMethod";
   public static final String PROOF_PURPOSE = "proofPurpose";
   public static final String JWS = "jws";
   public static final String CREATED = "created";
