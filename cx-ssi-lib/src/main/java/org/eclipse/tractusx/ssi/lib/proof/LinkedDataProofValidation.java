@@ -23,6 +23,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
@@ -49,10 +50,9 @@ public class LinkedDataProofValidation {
   private final IVerifier verifier;
 
   @SneakyThrows
-  public boolean verifiyProof(VerifiableCredential verifiableCredential) {
+  public boolean verifiyProof(Verifiable document) {
 
-    final TransformedLinkedData transformedData =
-        transformer.transform(verifiableCredential.removeProof());
+    final TransformedLinkedData transformedData = transformer.transform(document);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
 
     return verifier.verify(hashedData, verifiableCredential);

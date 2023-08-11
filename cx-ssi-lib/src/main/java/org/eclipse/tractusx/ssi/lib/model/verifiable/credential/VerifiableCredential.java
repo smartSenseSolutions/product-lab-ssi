@@ -26,8 +26,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import lombok.*;
-import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
-import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 // @formatter:off
@@ -47,43 +46,26 @@ import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
  */
 // @formatter:on
 @ToString(callSuper = true)
-public class VerifiableCredential extends JsonLdObject {
+public class VerifiableCredential extends Verifiable {
 
   public static final URI DEFAULT_CONTEXT = URI.create("https://www.w3.org/2018/credentials/v1");
   public static final String TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-  public static final String ID = "id";
-  public static final String TYPE = "type";
   public static final String ISSUER = "issuer";
   public static final String ISSUANCE_DATE = "issuanceDate";
   public static final String EXPIRATION_DATE = "expirationDate";
   public static final String CREDENTIAL_SUBJECT = "credentialSubject";
-  public static final String PROOF = "proof";
 
   public VerifiableCredential(Map<String, Object> json) {
-    super(json);
+    super(json,VerifiableType.VC);
 
     try {
       // validate getters
-      Objects.requireNonNull(this.getId());
-      Objects.requireNonNull(this.getTypes());
       Objects.requireNonNull(this.getIssuer());
       Objects.requireNonNull(this.getIssuanceDate());
       Objects.requireNonNull(this.getCredentialSubject());
       this.getExpirationDate();
       this.getProof();
 
-      // there exists an error that prevents quads from being created correctly.
-      // as this interferes with the credential signature, this is a security risk
-      // see https://github.com/eclipse-tractusx/SSI-agent-lib/issues/4
-      // as workaround we ensure that the credential ID starts with one or more letters followed by
-      // a colon
-      final String regex = "^[a-zA-Z]+:.*$";
-      if (!this.getId().toString().matches(regex)) {
-        throw new IllegalArgumentException(
-            String.format(
-                "Invalid VerifiableCredential. Credential ID must start with one or more letters followed by a colon. This is a temporary mitigation for the following security risk: %s",
-                "https://github.com/eclipse-tractusx/SSI-agent-lib/issues/4"));
-      }
     } catch (Exception e) {
       throw new IllegalArgumentException(
           String.format("Invalid VerifiableCredential: %s", SerializeUtil.toJson(json)), e);
@@ -94,16 +76,6 @@ public class VerifiableCredential extends JsonLdObject {
           String.format(
               "Invalid VerifiableCredential. CredentialSubject must not be empty: %s",
               SerializeUtil.toJson(json)));
-  }
-
-  @NonNull
-  public URI getId() {
-    return SerializeUtil.asURI(this.get(ID));
-  }
-
-  @NonNull
-  public List<String> getTypes() {
-    return (List<String>) this.get(TYPE);
   }
 
   @NonNull
@@ -138,26 +110,4 @@ public class VerifiableCredential extends JsonLdObject {
     }
   }
 
-  public Proof getProof() {
-    final Object subject = this.get(PROOF);
-    if (subject == null) {
-      return null;
-    }
-
-    return new Proof((Map<String, Object>) subject);
-  }
-
-  public VerifiableCredential removeProof() {
-
-    VerifiableCredentialBuilder builder = new VerifiableCredentialBuilder();
-    return builder
-        .id(this.getId())
-        .context(this.getContext())
-        .credentialSubject(this.getCredentialSubject())
-        .expirationDate(this.getExpirationDate())
-        .issuanceDate(this.getIssuanceDate())
-        .issuer(this.getIssuer())
-        .type(this.getTypes())
-        .build();
-  }
 }
