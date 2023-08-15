@@ -19,6 +19,7 @@
 
 package org.eclipse.tractusx.ssi.lib.model.verifiable.credential;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.net.URI;
 import java.time.Instant;
 import java.util.List;
@@ -54,7 +55,9 @@ public class VerifiableCredential extends Verifiable {
   public static final String ISSUANCE_DATE = "issuanceDate";
   public static final String EXPIRATION_DATE = "expirationDate";
   public static final String CREDENTIAL_SUBJECT = "credentialSubject";
+  public static final String CREDENTIAL_STATUS = "credentialStatus";
 
+  @JsonCreator
   public VerifiableCredential(Map<String, Object> json) {
     super(json, VerifiableType.VC);
 
@@ -71,31 +74,36 @@ public class VerifiableCredential extends Verifiable {
           String.format("Invalid VerifiableCredential: %s", SerializeUtil.toJson(json)), e);
     }
 
-    if (this.getCredentialSubject().isEmpty())
+    if (getCredentialSubject().isEmpty()) {
       throw new IllegalArgumentException(
           String.format(
               "Invalid VerifiableCredential. CredentialSubject must not be empty: %s",
               SerializeUtil.toJson(json)));
+    }
+
+    // validate status list if provided
   }
 
   @NonNull
   public URI getIssuer() {
-    return SerializeUtil.asURI(this.get(ISSUER));
+    return SerializeUtil.asURI(get(ISSUER));
   }
 
   @NonNull
   public Instant getIssuanceDate() {
-    return Instant.parse((String) this.get(ISSUANCE_DATE));
+    return Instant.parse((String) get(ISSUANCE_DATE));
   }
 
   public Instant getExpirationDate() {
-    if (!this.containsKey(EXPIRATION_DATE)) return null;
-    return Instant.parse((String) this.get(EXPIRATION_DATE));
+    if (!containsKey(EXPIRATION_DATE)) {
+      return null;
+    }
+    return Instant.parse((String) get(EXPIRATION_DATE));
   }
 
   @NonNull
   public List<VerifiableCredentialSubject> getCredentialSubject() {
-    final Object subject = this.get(CREDENTIAL_SUBJECT);
+    Object subject = get(CREDENTIAL_SUBJECT);
 
     if (subject instanceof List) {
       return ((List<Map<String, Object>>) subject)
@@ -107,6 +115,32 @@ public class VerifiableCredential extends Verifiable {
           "Invalid credential subject type. "
               + subject.getClass().getName()
               + " is not supported.");
+    }
+  }
+
+  public VerifiableCredentialStatus getVerifiableCredentialStatus() {
+    Object data = get(CREDENTIAL_STATUS);
+    if (data == null) {
+      return null;
+    }
+    Object type = ((Map<String, Object>) data).get(TYPE);
+    if (Objects.isNull(type)) {
+      throw new IllegalArgumentException("Status type not found");
+    }
+    if (type.toString().equals(VerifiableCredentialStatusList2021Entry.STATUS_LIST_2021_ENTRY)) {
+      return new VerifiableCredentialStatusList2021Entry((Map<String, Object>) data);
+    } else {
+      Map<String, Object> map = (Map<String, Object>) data;
+      return new VerifiableCredentialStatus(map) {
+        @Override
+        public String getType() {
+          if (map.containsKey(TYPE)) {
+            return map.get(TYPE).toString();
+          } else {
+            throw new IllegalArgumentException("Status type not found");
+          }
+        }
+      };
     }
   }
 }

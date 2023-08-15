@@ -29,6 +29,8 @@ import org.eclipse.tractusx.ssi.lib.model.did.Did;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
+@Deprecated
+/** Remove when {@code DidDocumentResolver} is removed. */
 public class TestDidDocumentResolver implements DidDocumentResolver {
   private final Map<Did, DidDocument> documents = new HashMap<>();
 

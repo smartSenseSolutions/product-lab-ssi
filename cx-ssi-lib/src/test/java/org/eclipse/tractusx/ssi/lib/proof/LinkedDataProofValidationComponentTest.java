@@ -33,7 +33,7 @@ import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
-import org.eclipse.tractusx.ssi.lib.util.identity.TestDidDocumentResolver;
+import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.eclipse.tractusx.ssi.lib.util.vc.TestVerifiableFactory;
@@ -47,28 +47,27 @@ public class LinkedDataProofValidationComponentTest {
   private LinkedDataProofGenerator linkedDataProofGenerator;
 
   private TestIdentity credentialIssuer;
-  private TestDidDocumentResolver didDocumentResolver;
+  private TestDidResolver didResolver;
 
   @BeforeEach
-  public void setup() {}
+  public void setup() {
+    SsiLibrary.initialize();
+    this.didResolver = new TestDidResolver();
+  }
 
   @Test
   public void testVCProofFailureOnManipulatedCredential()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           KeyGenerationException {
 
-    SsiLibrary.initialize();
-    this.didDocumentResolver = new TestDidDocumentResolver();
-
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
-    didDocumentResolver.register(credentialIssuer);
+    didResolver.register(credentialIssuer);
 
     // Generator
     linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
 
     // Verification
-    linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(didDocumentResolver.withRegistry());
+    linkedDataProofValidation = LinkedDataProofValidation.newInstance(this.didResolver);
 
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
@@ -98,18 +97,15 @@ public class LinkedDataProofValidationComponentTest {
   public void testVCEd21559ProofGenerationAndVerification()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           KeyGenerationException {
-    SsiLibrary.initialize();
-    this.didDocumentResolver = new TestDidDocumentResolver();
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
-    didDocumentResolver.register(credentialIssuer);
+    didResolver.register(credentialIssuer);
 
     // Generator
     linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
 
     // Verification
-    linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(didDocumentResolver.withRegistry());
+    linkedDataProofValidation = LinkedDataProofValidation.newInstance(this.didResolver);
 
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
@@ -133,18 +129,15 @@ public class LinkedDataProofValidationComponentTest {
   public void testVCJWSProofGenerationAndVerification()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           KeyGenerationException {
-    SsiLibrary.initialize();
-    this.didDocumentResolver = new TestDidDocumentResolver();
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
-    didDocumentResolver.register(credentialIssuer);
+    didResolver.register(credentialIssuer);
 
     // Generator
     linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
 
     // Verifier
-    linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(didDocumentResolver.withRegistry());
+    linkedDataProofValidation = LinkedDataProofValidation.newInstance(this.didResolver);
 
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(1).getId();
@@ -169,18 +162,15 @@ public class LinkedDataProofValidationComponentTest {
   public void testVPEd21559ProofGenerationAndVerification()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           KeyGenerationException {
-    SsiLibrary.initialize();
-    this.didDocumentResolver = new TestDidDocumentResolver();
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
-    didDocumentResolver.register(credentialIssuer);
+    didResolver.register(credentialIssuer);
 
     // Generator
     linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.ED21559);
 
     // Verifier
-    linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(didDocumentResolver.withRegistry());
+    linkedDataProofValidation = LinkedDataProofValidation.newInstance(didResolver);
 
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
@@ -203,7 +193,7 @@ public class LinkedDataProofValidationComponentTest {
             vp, verificationMethod, credentialIssuer.getPrivateKey());
 
     final VerifiablePresentation vpWithProof = TestVerifiableFactory.attachProof(vp, vpProof);
-    System.out.println(vpWithProof.toPrettyJson());
+
     var isOk = linkedDataProofValidation.verifiy(vpWithProof);
 
     Assertions.assertTrue(isOk);
@@ -213,18 +203,15 @@ public class LinkedDataProofValidationComponentTest {
   public void testVPJWSProofGenerationAndVerification()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           KeyGenerationException {
-    SsiLibrary.initialize();
-    this.didDocumentResolver = new TestDidDocumentResolver();
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
-    didDocumentResolver.register(credentialIssuer);
+    didResolver.register(credentialIssuer);
 
     // Generator
     linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
 
     // Verifier
-    linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(didDocumentResolver.withRegistry());
+    linkedDataProofValidation = LinkedDataProofValidation.newInstance(didResolver);
 
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(1).getId();
@@ -249,8 +236,6 @@ public class LinkedDataProofValidationComponentTest {
                 vp, verificationMethod, credentialIssuer.getPrivateKey());
 
     final VerifiablePresentation vpWithProof = TestVerifiableFactory.attachProof(vp, vpProof);
-
-    System.out.println(vpWithProof.toPrettyJson());
 
     var isOk = linkedDataProofValidation.verifiy(vpWithProof);
 

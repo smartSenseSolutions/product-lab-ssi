@@ -38,6 +38,10 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
 
 @RequiredArgsConstructor
+@Deprecated
+/**
+ * @deprecated replaced by {@link DidWebResolver}
+ */
 public class DidWebDocumentResolver implements DidDocumentResolver {
 
   private final HttpClient client;

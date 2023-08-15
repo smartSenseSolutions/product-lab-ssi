@@ -28,8 +28,8 @@ import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
@@ -48,8 +48,9 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 @RequiredArgsConstructor
 public class Ed25519ProofVerifier implements IVerifier {
 
-  private final DidDocumentResolverRegistry didDocumentResolverRegistry;
+  private final DidResolver didResolver;
 
+  @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable verifiable)
       throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
           InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion {
@@ -64,18 +65,17 @@ public class Ed25519ProofVerifier implements IVerifier {
     IPublicKey publicKey = this.discoverPublicKey(ed25519Signature2020);
 
     final MultibaseString signature = ed25519Signature2020.getProofValue();
+
     return verify(hashedLinkedData, signature.getDecoded(), publicKey);
   }
 
   private IPublicKey discoverPublicKey(Ed25519Signature2020 signature)
       throws DidDocumentResolverNotRegisteredException, UnsupportedSignatureTypeException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion {
+          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion, DidResolverException {
 
-    final DidDocumentResolver didDocumentResolver;
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
-    didDocumentResolver = didDocumentResolverRegistry.get(issuer.getMethod());
 
-    final DidDocument document = didDocumentResolver.resolve(issuer);
+    final DidDocument document = this.didResolver.resolve(issuer);
     final URI verificationMethodId = signature.getVerificationMethod();
 
     final Ed25519VerificationMethod key =

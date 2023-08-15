@@ -32,8 +32,8 @@ import java.text.ParseException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
@@ -52,8 +52,9 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 @RequiredArgsConstructor
 public class JWSProofVerifier implements IVerifier {
 
-  private final DidDocumentResolverRegistry didDocumentResolverRegistry;
+  private final DidResolver didResolver;
 
+  @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, Verifiable document)
       throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
           NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat {
@@ -93,14 +94,11 @@ public class JWSProofVerifier implements IVerifier {
 
   private OctetKeyPair discoverOctectKey(JWSSignature2020 signature)
       throws DidDocumentResolverNotRegisteredException, UnsupportedSignatureTypeException,
-          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion {
+          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion, DidResolverException {
 
-    final DidDocumentResolver didDocumentResolver;
     final Did issuer = DidParser.parse(signature.getVerificationMethod());
 
-    didDocumentResolver = didDocumentResolverRegistry.get(issuer.getMethod());
-
-    final DidDocument document = didDocumentResolver.resolve(issuer);
+    final DidDocument document = this.didResolver.resolve(issuer);
 
     final URI verificationMethodId = signature.getVerificationMethod();
 

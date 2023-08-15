@@ -60,5 +60,4 @@ public class ed21559KeyTest {
 
     assertTrue(Arrays.equals(originalPublicKey, publicKey.asByte()));
   }
-
 }

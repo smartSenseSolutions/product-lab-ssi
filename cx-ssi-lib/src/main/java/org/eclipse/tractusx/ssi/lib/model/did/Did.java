@@ -49,15 +49,4 @@ public class Did {
     }
     return uri.toString();
   }
-
-  // public String toString(boolean withFragment){
-  //   StringBuilder uri = new StringBuilder(String.format("did:%s:%s", method, methodIdentifier));
-  //   if (withFragment) {
-  //     if (fragment != null && !fragment.isBlank()) {
-  //       uri.append(String.format("#%s", fragment));
-  //     }
-
-  //   }
-  //   return uri.toString();
-  // }
 }

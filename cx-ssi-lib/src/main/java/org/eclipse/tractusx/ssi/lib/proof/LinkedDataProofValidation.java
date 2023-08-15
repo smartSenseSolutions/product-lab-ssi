@@ -22,7 +22,7 @@ package org.eclipse.tractusx.ssi.lib.proof;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
@@ -36,20 +36,19 @@ import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LinkedDataProofValidation {
 
-  public static LinkedDataProofValidation newInstance(
-      DidDocumentResolverRegistry didDocumentResolverRegistry) {
+  public static LinkedDataProofValidation newInstance(DidResolver didResolver) {
 
-    if (didDocumentResolverRegistry == null) {
+    if (didResolver == null) {
       throw new NullPointerException("Document Resolver shouldn't be null");
     }
 
     return new LinkedDataProofValidation(
-        new LinkedDataHasher(), new LinkedDataTransformer(), didDocumentResolverRegistry);
+        new LinkedDataHasher(), new LinkedDataTransformer(), didResolver);
   }
 
   private final LinkedDataHasher hasher;
   private final LinkedDataTransformer transformer;
-  private final DidDocumentResolverRegistry didDocumentResolverRegistry;
+  private final DidResolver didResolver;
 
   /**
    * To verifiy {@link VerifiableCredential} or {@link VerifiablePresentation} In this method we are
@@ -61,8 +60,8 @@ public class LinkedDataProofValidation {
 
     IVerifier verifier =
         verifiable.getProof().getType() == SignatureType.ED21559.toString()
-            ? new Ed25519ProofVerifier(this.didDocumentResolverRegistry)
-            : new JWSProofVerifier(this.didDocumentResolverRegistry);
+            ? new Ed25519ProofVerifier(this.didResolver)
+            : new JWSProofVerifier(this.didResolver);
 
     final TransformedLinkedData transformedData = transformer.transform(verifiable);
     final HashedLinkedData hashedData = hasher.hash(transformedData);

@@ -16,7 +16,7 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed21559ProofSigner;
 import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
-import org.eclipse.tractusx.ssi.lib.util.identity.TestDidDocumentResolver;
+import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.eclipse.tractusx.ssi.lib.util.vc.TestVerifiableFactory;
@@ -28,7 +28,7 @@ class SerializedJwtPresentationFactoryImplTest {
   private LinkedDataProofGenerator linkedDataProofGenerator;
 
   private TestIdentity credentialIssuer;
-  private TestDidDocumentResolver didDocumentResolver;
+  private TestDidResolver didResolver;
 
   private SignedJwtVerifier jwtVerifier;
 
@@ -36,11 +36,11 @@ class SerializedJwtPresentationFactoryImplTest {
   @Test
   public void testJwtSerialization() {
     SsiLibrary.initialize();
-    this.didDocumentResolver = new TestDidDocumentResolver();
+    this.didResolver = new TestDidResolver();
 
     credentialIssuer = TestIdentityFactory.newIdentityWithED25519Keys();
-    didDocumentResolver.register(credentialIssuer);
-    jwtVerifier = new SignedJwtVerifier(didDocumentResolver.withRegistry());
+    didResolver.register(credentialIssuer);
+    jwtVerifier = new SignedJwtVerifier(didResolver);
 
     linkedDataProofGenerator =
         new LinkedDataProofGenerator(
