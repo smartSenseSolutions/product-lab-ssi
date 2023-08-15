@@ -27,8 +27,8 @@ import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.KeyGenerationException;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
-import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED21559ProofSigner;
-import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED25519ProofVerifier;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed21559ProofSigner;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidDocumentResolver;
@@ -49,8 +49,8 @@ public class SignAndVerifyTest {
     didDocumentResolver.register(testIdentity);
 
     var data = "Hello World".getBytes();
-    var signer = new ED21559ProofSigner();
-    var verifier = new ED25519ProofVerifier(didDocumentResolver.withRegistry());
+    var signer = new Ed21559ProofSigner();
+    var verifier = new Ed25519ProofVerifier(didDocumentResolver.withRegistry());
 
     var signature = signer.sign(new HashedLinkedData(data), testIdentity.getPrivateKey());
     var isSigned =

@@ -30,7 +30,7 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
-import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED25519ProofVerifier;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -61,7 +61,7 @@ public class LinkedDataProofValidation {
 
     IVerifier verifier =
         verifiable.getProof().getType() == SignatureType.ED21559.toString()
-            ? new ED25519ProofVerifier(this.didDocumentResolverRegistry)
+            ? new Ed25519ProofVerifier(this.didDocumentResolverRegistry)
             : new JWSProofVerifier(this.didDocumentResolverRegistry);
 
     final TransformedLinkedData transformedData = transformer.transform(verifiable);

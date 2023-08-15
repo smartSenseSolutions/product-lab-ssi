@@ -67,6 +67,7 @@ public class VerifiablePresentationBuilder {
     map.put(VerifiablePresentation.ID, id.toString());
     map.put(VerifiablePresentation.TYPE, types);
     map.put(VerifiablePresentation.VERIFIABLE_CREDENTIAL, verifiableCredentials);
+    map.put(VerifiablePresentation.PROOF, proof);
     return new VerifiablePresentation(map);
   }
 }

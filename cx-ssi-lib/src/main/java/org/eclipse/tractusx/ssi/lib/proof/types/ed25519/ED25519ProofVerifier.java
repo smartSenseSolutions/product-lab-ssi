@@ -46,7 +46,7 @@ import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
 @RequiredArgsConstructor
-public class ED25519ProofVerifier implements IVerifier {
+public class Ed25519ProofVerifier implements IVerifier {
 
   private final DidDocumentResolverRegistry didDocumentResolverRegistry;
 
