@@ -14,7 +14,7 @@ import org.eclipse.tractusx.ssi.lib.proof.LinkedDataProofGenerator;
 import org.eclipse.tractusx.ssi.lib.proof.SignatureType;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
-import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed21559ProofSigner;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofSigner;
 import org.eclipse.tractusx.ssi.lib.serialization.jsonLd.JsonLdSerializerImpl;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentity;
@@ -47,7 +47,7 @@ class SerializedJwtPresentationFactoryImplTest {
             SignatureType.JWS,
             new LinkedDataHasher(),
             new LinkedDataTransformer(),
-            new Ed21559ProofSigner());
+            new Ed25519ProofSigner());
 
     // prepare key
     final URI verificationMethod =

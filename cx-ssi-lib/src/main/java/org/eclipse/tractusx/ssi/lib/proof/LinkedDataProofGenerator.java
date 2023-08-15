@@ -39,7 +39,7 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
 import org.eclipse.tractusx.ssi.lib.proof.transform.TransformedLinkedData;
-import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed21559ProofSigner;
+import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.Ed25519ProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
 
 @RequiredArgsConstructor
@@ -49,7 +49,7 @@ public class LinkedDataProofGenerator {
       throws UnsupportedSignatureTypeException {
     if (type == SignatureType.ED21559) {
       return new LinkedDataProofGenerator(
-          type, new LinkedDataHasher(), new LinkedDataTransformer(), new Ed21559ProofSigner());
+          type, new LinkedDataHasher(), new LinkedDataTransformer(), new Ed25519ProofSigner());
     } else if (type == SignatureType.JWS) {
       return new LinkedDataProofGenerator(
           type, new LinkedDataHasher(), new LinkedDataTransformer(), new JWSProofSigner());
