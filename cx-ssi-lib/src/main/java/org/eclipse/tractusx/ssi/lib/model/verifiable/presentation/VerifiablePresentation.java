@@ -37,7 +37,7 @@ public class VerifiablePresentation extends Verifiable {
   public static final String VERIFIABLE_CREDENTIAL = "verifiableCredential";
 
   public VerifiablePresentation(Map<String, Object> json) {
-    super(json,VerifiableType.VP);
+    super(json, VerifiableType.VP);
 
     try {
       // validate getters
@@ -48,7 +48,6 @@ public class VerifiablePresentation extends Verifiable {
           String.format("Invalid VerifiablePresentation: %s", SerializeUtil.toJson(json)), e);
     }
   }
-
 
   public static VerifiablePresentation fromJson(String json) {
     var map = SerializeUtil.fromJson(json);
@@ -61,5 +60,4 @@ public class VerifiablePresentation extends Verifiable {
         (List<Map<String, Object>>) this.get(VERIFIABLE_CREDENTIAL);
     return credentials.stream().map(VerifiableCredential::new).collect(Collectors.toList());
   }
-
 }

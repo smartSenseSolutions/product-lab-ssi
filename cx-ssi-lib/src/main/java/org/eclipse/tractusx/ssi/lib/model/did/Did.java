@@ -30,6 +30,12 @@ public class Did {
 
   @EqualsAndHashCode.Include @NonNull DidMethod method;
   @EqualsAndHashCode.Include @NonNull DidMethodIdentifier methodIdentifier;
+  @EqualsAndHashCode.Include String fragment;
+
+  public Did excludeFragment() {
+    Did newDid = new Did(method, methodIdentifier, null);
+    return newDid;
+  }
 
   public URI toUri() {
     return URI.create(toString());
@@ -37,6 +43,21 @@ public class Did {
 
   @Override
   public String toString() {
-    return String.format("did:%s:%s", method, methodIdentifier);
+    StringBuilder uri = new StringBuilder(String.format("did:%s:%s", method, methodIdentifier));
+    if (fragment != null && !fragment.isBlank()) {
+      uri.append(String.format("#%s", fragment));
+    }
+    return uri.toString();
   }
+
+  // public String toString(boolean withFragment){
+  //   StringBuilder uri = new StringBuilder(String.format("did:%s:%s", method, methodIdentifier));
+  //   if (withFragment) {
+  //     if (fragment != null && !fragment.isBlank()) {
+  //       uri.append(String.format("#%s", fragment));
+  //     }
+
+  //   }
+  //   return uri.toString();
+  // }
 }

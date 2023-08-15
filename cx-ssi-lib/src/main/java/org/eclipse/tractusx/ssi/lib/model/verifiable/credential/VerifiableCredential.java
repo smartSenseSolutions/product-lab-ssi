@@ -56,7 +56,7 @@ public class VerifiableCredential extends Verifiable {
   public static final String CREDENTIAL_SUBJECT = "credentialSubject";
 
   public VerifiableCredential(Map<String, Object> json) {
-    super(json,VerifiableType.VC);
+    super(json, VerifiableType.VC);
 
     try {
       // validate getters
@@ -109,5 +109,4 @@ public class VerifiableCredential extends Verifiable {
               + " is not supported.");
     }
   }
-
 }

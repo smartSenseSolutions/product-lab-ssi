@@ -54,6 +54,7 @@ public class LinkedDataProofValidationComponentTest {
   public void testProofFailureOnManipulatedCredential()
       throws IOException, UnsupportedSignatureTypeException, InvalidePrivateKeyFormat,
           KeyGenerationException {
+
     SsiLibrary.initialize();
     this.didDocumentResolver = new TestDidDocumentResolver();
 
@@ -65,12 +66,8 @@ public class LinkedDataProofValidationComponentTest {
 
     // Verification
     linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(
-            SignatureType.ED21559, didDocumentResolver.withRegistry());
+        LinkedDataProofValidation.newInstance(didDocumentResolver.withRegistry());
 
-    // prepare key
-    // 0 == ED21559
-    // 1 == JWS
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
 
@@ -90,7 +87,7 @@ public class LinkedDataProofValidationComponentTest {
         VerifiableCredential.EXPIRATION_DATE,
         formatter.format(Instant.now().plusSeconds(60 * 60 * 24 * 365 * 10)));
 
-    var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
+    var isOk = linkedDataProofValidation.verifiy(credentialWithProof);
 
     Assertions.assertFalse(isOk);
   }
@@ -110,12 +107,8 @@ public class LinkedDataProofValidationComponentTest {
 
     // Verification
     linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(
-            SignatureType.ED21559, didDocumentResolver.withRegistry());
+        LinkedDataProofValidation.newInstance(didDocumentResolver.withRegistry());
 
-    // prepare key
-    // 0 == ED21559
-    // 1 == JWS
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(0).getId();
 
@@ -129,7 +122,7 @@ public class LinkedDataProofValidationComponentTest {
     final VerifiableCredential credentialWithProof =
         TestCredentialFactory.attachProof(credential, proof);
 
-    var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
+    var isOk = linkedDataProofValidation.verifiy(credentialWithProof);
 
     Assertions.assertTrue(isOk);
   }
@@ -146,14 +139,11 @@ public class LinkedDataProofValidationComponentTest {
 
     // Generator
     linkedDataProofGenerator = LinkedDataProofGenerator.newInstance(SignatureType.JWS);
+
     // Verifier
     linkedDataProofValidation =
-        LinkedDataProofValidation.newInstance(
-            SignatureType.JWS, didDocumentResolver.withRegistry());
+        LinkedDataProofValidation.newInstance(didDocumentResolver.withRegistry());
 
-    // prepare key
-    // 0 == ED21559
-    // 1 == JWS
     final URI verificationMethod =
         credentialIssuer.getDidDocument().getVerificationMethods().get(1).getId();
 
@@ -168,7 +158,7 @@ public class LinkedDataProofValidationComponentTest {
     final VerifiableCredential credentialWithProof =
         TestCredentialFactory.attachProof(credential, proof);
 
-    var isOk = linkedDataProofValidation.verifiyProof(credentialWithProof);
+    var isOk = linkedDataProofValidation.verifiy(credentialWithProof);
 
     Assertions.assertTrue(isOk);
   }

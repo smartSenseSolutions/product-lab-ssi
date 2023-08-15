@@ -9,8 +9,6 @@ import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
-
-
 public abstract class Verifiable extends JsonLdObject {
 
   public static final String ID = "id";
@@ -19,16 +17,16 @@ public abstract class Verifiable extends JsonLdObject {
 
   private VerifiableType verifableType;
 
-  public enum VerifiableType{
-   VC,
-   VP
+  public enum VerifiableType {
+    VC,
+    VP
   }
 
-  public Verifiable(Map<String, Object> json,VerifiableType type) {
+  public Verifiable(Map<String, Object> json, VerifiableType type) {
     super(json);
     Objects.requireNonNull(this.getId());
     Objects.requireNonNull(this.getTypes());
-    Objects.requireNonNull(type,"Verifable Type should not be null");
+    Objects.requireNonNull(type, "Verifable Type should not be null");
     this.verifableType = type;
     this.checkId();
   }
@@ -54,10 +52,9 @@ public abstract class Verifiable extends JsonLdObject {
     return new Proof((Map<String, Object>) subject);
   }
 
- public TYPE getType() {
-   return verifableType;
- }
-
+  public VerifiableType getType() {
+    return verifableType;
+  }
 
   /**
    * There exists an error that prevents quads from being created correctly. as this interferes with
@@ -74,5 +71,4 @@ public abstract class Verifiable extends JsonLdObject {
               "https://github.com/eclipse-tractusx/SSI-agent-lib/issues/4"));
     }
   }
-
 }

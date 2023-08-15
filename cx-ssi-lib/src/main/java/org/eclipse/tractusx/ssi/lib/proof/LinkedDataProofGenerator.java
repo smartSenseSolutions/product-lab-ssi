@@ -27,7 +27,6 @@ import org.eclipse.tractusx.ssi.lib.crypt.IPrivateKey;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidePrivateKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
-import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
@@ -35,6 +34,7 @@ import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.ed21559.Ed25519Signature2020Builder;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020Builder;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 import org.eclipse.tractusx.ssi.lib.proof.hash.LinkedDataHasher;
 import org.eclipse.tractusx.ssi.lib.proof.transform.LinkedDataTransformer;
@@ -63,7 +63,7 @@ public class LinkedDataProofGenerator {
   private final LinkedDataTransformer transformer;
   private final ISigner signer;
 
-  public Proof createProof(JsonLdObject document, URI verificationMethodId, IPrivateKey privateKey)
+  public Proof createProof(Verifiable document, URI verificationMethodId, IPrivateKey privateKey)
       throws SsiException, InvalidePrivateKeyFormat {
 
     final TransformedLinkedData transformedData = transformer.transform(document);

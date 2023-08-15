@@ -35,6 +35,7 @@ import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
+import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
 import org.eclipse.tractusx.ssi.lib.exception.SsiException;
 import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
@@ -44,7 +45,7 @@ import org.eclipse.tractusx.ssi.lib.model.did.DidParser;
 import org.eclipse.tractusx.ssi.lib.model.did.JWKVerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.model.proof.jws.JWSSignature2020;
-import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.proof.IVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 
@@ -53,26 +54,55 @@ public class JWSProofVerifier implements IVerifier {
 
   private final DidDocumentResolverRegistry didDocumentResolverRegistry;
 
-  public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
+  public boolean verify(HashedLinkedData hashedLinkedData, Verifiable document)
       throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
-          NoVerificationKeyFoundExcpetion {
+          NoVerificationKeyFoundExcpetion, InvalidePublicKeyFormat {
 
-    final URI issuer = credential.getIssuer();
-    final Did issuerDid = DidParser.parse(issuer);
-
-    final DidDocumentResolver didDocumentResolver;
-    didDocumentResolver = didDocumentResolverRegistry.get(issuerDid.getMethod());
-
-    final DidDocument document = didDocumentResolver.resolve(issuerDid);
-
-    final Proof proof = credential.getProof();
+    final Proof proof = document.getProof();
     if (!proof.getType().equals(JWSSignature2020.JWS_VERIFICATION_KEY_2020)) {
       throw new UnsupportedSignatureTypeException(proof.getType());
     }
 
     final JWSSignature2020 jwsSignature2020 = new JWSSignature2020(proof);
 
-    final URI verificationMethodId = jwsSignature2020.getVerificationMethod();
+    Payload payload = new Payload(hashedLinkedData.getValue());
+
+    JWSObject jws;
+
+    try {
+      jws = JWSObject.parse(jwsSignature2020.getJws(), payload);
+    } catch (ParseException e) {
+      throw new SsiException(e.getMessage());
+    }
+
+    var keyPair = this.discoverOctectKey(jwsSignature2020);
+    JWSVerifier verifier;
+
+    try {
+      verifier = new Ed25519Verifier(keyPair);
+    } catch (JOSEException e) {
+      throw new SsiException(e.getMessage());
+    }
+
+    try {
+      return jws.verify(verifier);
+    } catch (JOSEException e) {
+      throw new SsiException(e.getMessage());
+    }
+  }
+
+  private OctetKeyPair discoverOctectKey(JWSSignature2020 signature)
+      throws DidDocumentResolverNotRegisteredException, UnsupportedSignatureTypeException,
+          InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion {
+
+    final DidDocumentResolver didDocumentResolver;
+    final Did issuer = DidParser.parse(signature.getVerificationMethod());
+
+    didDocumentResolver = didDocumentResolverRegistry.get(issuer.getMethod());
+
+    final DidDocument document = didDocumentResolver.resolve(issuer);
+
+    final URI verificationMethodId = signature.getVerificationMethod();
 
     final JWKVerificationMethod key =
         document.getVerificationMethods().stream()
@@ -89,27 +119,7 @@ public class JWSProofVerifier implements IVerifier {
 
     var keyPair = new OctetKeyPair.Builder(Curve.Ed25519, x).build();
 
-    Payload payload = new Payload(hashedLinkedData.getValue());
-    JWSObject jws;
-
-    try {
-      jws = JWSObject.parse(jwsSignature2020.getJws(), payload);
-    } catch (ParseException e) {
-      throw new SsiException(e.getMessage());
-    }
-
-    JWSVerifier verifier;
-    try {
-      verifier = new Ed25519Verifier(keyPair);
-    } catch (JOSEException e) {
-      throw new SsiException(e.getMessage());
-    }
-
-    try {
-      return jws.verify(verifier);
-    } catch (JOSEException e) {
-      throw new SsiException(e.getMessage());
-    }
+    return keyPair;
   }
 
   @SneakyThrows
