@@ -25,9 +25,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.model.JsonLdObject;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatus;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatusList2021Entry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
 /** The type Serialize util. */
@@ -43,26 +45,40 @@ public final class SerializeUtil {
       Map.of(
           VerifiableCredential.class,
           List.of(
-              "@context",
-              "id",
-              "type",
+              JsonLdObject.CONTEXT,
+              VerifiableCredential.ID,
+              VerifiableCredential.TYPE,
               "credentialSchema",
-              "issuer",
-              "issuanceDate",
+              VerifiableCredential.ISSUER,
+              VerifiableCredential.ISSUANCE_DATE,
               "referenceNumber",
-              "expirationDate",
-              "credentialSubject",
+              VerifiableCredential.EXPIRATION_DATE,
+              VerifiableCredential.CREDENTIAL_SUBJECT,
               "evidence",
               "termsOfUse",
               "refreshService",
-              "credentialStatus",
-              "proof"),
+              VerifiableCredential.CREDENTIAL_STATUS,
+              VerifiableCredential.PROOF),
           DidDocument.class,
-          List.of("@context", "id", "verificationMethod", "authentication"),
-          VerifiableCredentialStatus.class,
-          List.of("id", "type", "statusPurpose", "statusListIndex", "statusListCredential"),
+          List.of(
+              JsonLdObject.CONTEXT,
+              DidDocument.ID,
+              DidDocument.VERIFICATION_METHOD,
+              "authentication"),
+          VerifiableCredentialStatusList2021Entry.class,
+          List.of(
+              VerifiableCredentialStatus.ID,
+              VerifiableCredentialStatus.TYPE,
+              VerifiableCredentialStatusList2021Entry.STATUS_PURPOSE,
+              VerifiableCredentialStatusList2021Entry.STATUS_LIST_INDEX,
+              VerifiableCredentialStatusList2021Entry.STATUS_LIST_CREDENTIAL),
           VerifiablePresentation.class,
-          List.of("@context", "id", "type", "verifiableCredential", "proof"));
+          List.of(
+              JsonLdObject.CONTEXT,
+              VerifiablePresentation.ID,
+              VerifiablePresentation.TYPE,
+              VerifiablePresentation.VERIFIABLE_CREDENTIAL,
+              VerifiableCredential.PROOF));
 
   @SneakyThrows
   public static String toJson(Map<String, Object> map) {
