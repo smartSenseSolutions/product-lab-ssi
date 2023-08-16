@@ -25,6 +25,8 @@ import java.util.*;
 import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
 import org.eclipse.tractusx.ssi.lib.model.did.Ed25519VerificationMethod;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatus;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatusList2021Entry;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 import org.eclipse.tractusx.ssi.lib.util.TestResourceUtil;
 import org.junit.jupiter.api.Assertions;
@@ -52,8 +54,8 @@ public class SerializeUtilTest {
   }
 
   @Test
-  @DisplayName("Test property order in json string")
-  void testJsonPropertyOrder() throws JsonProcessingException {
+  @DisplayName("Test property order in json string for VC")
+  void testVCJsonPropertyOrder() throws JsonProcessingException {
     ObjectMapper objectMapper = new ObjectMapper();
 
     // test VC json
@@ -74,13 +76,20 @@ public class SerializeUtilTest {
       String value = valuesToCheck[keyIndex];
       Assertions.assertEquals(key, value);
     }
+  }
 
-    // test VP json
-    VerifiablePresentation vp = TestResourceUtil.getAlumniVerifiablePresentation();
-    set = objectMapper.readValue(vp.toJson(), LinkedHashMap.class).keySet();
-    keyOrder = SerializeUtil.ORDER_MAP_LIST.get(VerifiablePresentation.class);
-    valuesToCheck = set.toArray(new String[set.size()]);
-    presentKeys = new ArrayList<>();
+  @Test
+  @DisplayName("Test property order in json string for did document")
+  void testDidDocumentJsonPropertyOrder() throws JsonProcessingException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    // test did document json
+    DidDocument didDocument =
+        new DidDocument(TestResourceUtil.getDidDocument(Ed25519VerificationMethod.DEFAULT_TYPE));
+    Set<String> set = objectMapper.readValue(didDocument.toJson(), LinkedHashMap.class).keySet();
+    List<String> keyOrder = SerializeUtil.ORDER_MAP_LIST.get(DidDocument.class);
+    String[] valuesToCheck = set.toArray(new String[set.size()]);
+
+    List<String> presentKeys = new ArrayList<>();
     for (String s : keyOrder) {
       if (set.contains(s)) {
         presentKeys.add(s);
@@ -92,14 +101,60 @@ public class SerializeUtilTest {
       String value = valuesToCheck[keyIndex];
       Assertions.assertEquals(key, value);
     }
+  }
 
-    // test did document json
-    DidDocument document =
-        new DidDocument(TestResourceUtil.getDidDocument(Ed25519VerificationMethod.DEFAULT_TYPE));
-    set = objectMapper.readValue(document.toJson(), LinkedHashMap.class).keySet();
-    keyOrder = SerializeUtil.ORDER_MAP_LIST.get(DidDocument.class);
-    valuesToCheck = set.toArray(new String[set.size()]);
-    presentKeys = new ArrayList<>();
+  @Test
+  @DisplayName("Test property order in json string for VP")
+  void testVPJsonPropertyOrder() throws JsonProcessingException {
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    // test vp json
+    VerifiablePresentation vp = TestResourceUtil.getAlumniVerifiablePresentation();
+    Set<String> set = objectMapper.readValue(vp.toJson(), LinkedHashMap.class).keySet();
+    List<String> keyOrder = SerializeUtil.ORDER_MAP_LIST.get(VerifiablePresentation.class);
+    String[] valuesToCheck = set.toArray(new String[set.size()]);
+
+    List<String> presentKeys = new ArrayList<>();
+    for (String s : keyOrder) {
+      if (set.contains(s)) {
+        presentKeys.add(s);
+      }
+    }
+    Assertions.assertEquals(presentKeys.size(), set.size());
+    for (String key : presentKeys) {
+      int keyIndex = presentKeys.indexOf(key);
+      String value = valuesToCheck[keyIndex];
+      Assertions.assertEquals(key, value);
+    }
+  }
+
+  @Test
+  @DisplayName("Test property order in json string for status list")
+  void testStatusListJsonPropertyOrder() throws JsonProcessingException {
+
+    String validStatus =
+        "{\n"
+            + "    \"statusPurpose\": \"revocation\",\n"
+            + "    \"id\": \"https://example.com/credentials/status/3#94567\",\n"
+            + "    \"type\": \"StatusList2021Entry\",\n"
+            + "    \"statusListCredential\": \"https://example.com/credentials/status/3\",\n"
+            + "    \"statusListIndex\": \"94567\"\n"
+            + "  }";
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    Map<String, Object> statusMap = objectMapper.readValue(validStatus, Map.class);
+
+    VerifiableCredentialStatus VerifiableCredentialStatus =
+        new VerifiableCredentialStatusList2021Entry(statusMap);
+    // test vp json
+    Set<String> set =
+        objectMapper.readValue(VerifiableCredentialStatus.toJson(), LinkedHashMap.class).keySet();
+    List<String> keyOrder =
+        SerializeUtil.ORDER_MAP_LIST.get(VerifiableCredentialStatusList2021Entry.class);
+    String[] valuesToCheck = set.toArray(new String[set.size()]);
+
+    List<String> presentKeys = new ArrayList<>();
     for (String s : keyOrder) {
       if (set.contains(s)) {
         presentKeys.add(s);
