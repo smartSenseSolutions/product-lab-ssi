@@ -19,16 +19,26 @@
 
 package org.eclipse.tractusx.ssi.lib.did.resolver;
 
-import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
-import org.eclipse.tractusx.ssi.lib.model.did.DidMethod;
+public class DidResolverException extends Exception {
 
-/**
- * @deprecated replaced by {@link DidResolver}
- */
-public interface DidDocumentResolverRegistry {
-  DidDocumentResolver get(DidMethod did) throws DidDocumentResolverNotRegisteredException;
+  private static final long serialVersionUID = 1L;
 
-  void register(DidDocumentResolver resolver);
+  public DidResolverException() {}
 
-  void unregister(DidDocumentResolver resolver);
+  public DidResolverException(String message) {
+    super(message);
+  }
+
+  public DidResolverException(String message, Throwable cause) {
+    super(message, cause);
+  }
+
+  public DidResolverException(Throwable cause) {
+    super(cause);
+  }
+
+  public DidResolverException(
+      String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    super(message, cause, enableSuppression, writableStackTrace);
+  }
 }

@@ -31,7 +31,7 @@ import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED21559ProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.ed25519.ED25519ProofVerifier;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofSigner;
 import org.eclipse.tractusx.ssi.lib.proof.types.jws.JWSProofVerifier;
-import org.eclipse.tractusx.ssi.lib.util.identity.TestDidDocumentResolver;
+import org.eclipse.tractusx.ssi.lib.util.identity.TestDidResolver;
 import org.eclipse.tractusx.ssi.lib.util.identity.TestIdentityFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -42,15 +42,15 @@ public class SignAndVerifyTest {
   public void testSignAndVerify_ED201559()
       throws IOException, InvalidePrivateKeyFormat, InvalidePublicKeyFormat,
           KeyGenerationException {
-    final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
+    final TestDidResolver didResolver = new TestDidResolver();
 
     var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
 
-    didDocumentResolver.register(testIdentity);
+    didResolver.register(testIdentity);
 
     var data = "Hello World".getBytes();
     var signer = new ED21559ProofSigner();
-    var verifier = new ED25519ProofVerifier(didDocumentResolver.withRegistry());
+    var verifier = new ED25519ProofVerifier(didResolver);
 
     var signature = signer.sign(new HashedLinkedData(data), testIdentity.getPrivateKey());
     var isSigned =
@@ -63,16 +63,16 @@ public class SignAndVerifyTest {
   public void testSignAndVerify_JWS()
       throws IOException, JOSEException, NoSuchAlgorithmException, InvalidePrivateKeyFormat,
           InvalidePublicKeyFormat, KeyGenerationException {
-    final TestDidDocumentResolver didDocumentResolver = new TestDidDocumentResolver();
+    final TestDidResolver didResolver = new TestDidResolver();
     var testIdentity = TestIdentityFactory.newIdentityWithED25519Keys();
 
-    didDocumentResolver.register(testIdentity);
+    didResolver.register(testIdentity);
     var data = "Hello World".getBytes();
     MessageDigest digest = MessageDigest.getInstance("SHA-256");
     var value = digest.digest(data);
 
     var signer = new JWSProofSigner();
-    var verifier = new JWSProofVerifier(didDocumentResolver.withRegistry());
+    var verifier = new JWSProofVerifier(didResolver);
 
     var signature = signer.sign(new HashedLinkedData(value), testIdentity.getPrivateKey());
     var isSigned =

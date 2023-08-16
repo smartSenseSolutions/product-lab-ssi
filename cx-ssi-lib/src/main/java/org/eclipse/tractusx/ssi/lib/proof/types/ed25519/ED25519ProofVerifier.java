@@ -28,8 +28,8 @@ import org.bouncycastle.crypto.params.Ed25519PublicKeyParameters;
 import org.bouncycastle.crypto.signers.Ed25519Signer;
 import org.eclipse.tractusx.ssi.lib.crypt.IPublicKey;
 import org.eclipse.tractusx.ssi.lib.crypt.x21559.x21559PublicKey;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolver;
-import org.eclipse.tractusx.ssi.lib.did.resolver.DidDocumentResolverRegistry;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
+import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolverException;
 import org.eclipse.tractusx.ssi.lib.exception.DidDocumentResolverNotRegisteredException;
 import org.eclipse.tractusx.ssi.lib.exception.InvalidePublicKeyFormat;
 import org.eclipse.tractusx.ssi.lib.exception.NoVerificationKeyFoundExcpetion;
@@ -48,8 +48,9 @@ import org.eclipse.tractusx.ssi.lib.proof.hash.HashedLinkedData;
 @RequiredArgsConstructor
 public class ED25519ProofVerifier implements IVerifier {
 
-  private final DidDocumentResolverRegistry didDocumentResolverRegistry;
+  private final DidResolver didResolver;
 
+  @SneakyThrows({DidResolverException.class})
   public boolean verify(HashedLinkedData hashedLinkedData, VerifiableCredential credential)
       throws UnsupportedSignatureTypeException, DidDocumentResolverNotRegisteredException,
           InvalidePublicKeyFormat, NoVerificationKeyFoundExcpetion {
@@ -57,10 +58,7 @@ public class ED25519ProofVerifier implements IVerifier {
     final URI issuer = credential.getIssuer();
     final Did issuerDid = DidParser.parse(issuer);
 
-    final DidDocumentResolver didDocumentResolver;
-    didDocumentResolver = didDocumentResolverRegistry.get(issuerDid.getMethod());
-
-    final DidDocument document = didDocumentResolver.resolve(issuerDid);
+    final DidDocument document = didResolver.resolve(issuerDid);
     final Proof proof = credential.getProof();
     if (!proof.getType().equals(Ed25519Signature2020.ED25519_VERIFICATION_KEY_2018)) {
       throw new UnsupportedSignatureTypeException(proof.getType());
