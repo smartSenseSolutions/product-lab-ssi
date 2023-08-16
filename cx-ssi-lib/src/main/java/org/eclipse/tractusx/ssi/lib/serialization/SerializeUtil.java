@@ -19,33 +19,59 @@
 
 package org.eclipse.tractusx.ssi.lib.serialization;
 
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import java.net.URI;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.SneakyThrows;
+import org.eclipse.tractusx.ssi.lib.model.did.DidDocument;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredentialStatus;
+import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
 
+/** The type Serialize util. */
 public final class SerializeUtil {
 
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+  /**
+   * Specify oder of properties while creating JSON string from object like VerifiableCredential,
+   * DidDocument etc.
+   */
+  public static final Map<Class, List<String>> ORDER_MAP_LIST =
+      Map.of(
+          VerifiableCredential.class,
+          List.of(
+              "@context",
+              "id",
+              "type",
+              "credentialSchema",
+              "issuer",
+              "issuanceDate",
+              "referenceNumber",
+              "expirationDate",
+              "credentialSubject",
+              "evidence",
+              "termsOfUse",
+              "refreshService",
+              "credentialStatus",
+              "proof"),
+          DidDocument.class,
+          List.of("@context", "id", "verificationMethod", "authentication"),
+          VerifiableCredentialStatus.class,
+          List.of("id", "type", "statusPurpose", "statusListIndex", "statusListCredential"),
+          VerifiablePresentation.class,
+          List.of("@context", "id", "type", "verifiableCredential", "proof"));
+
   @SneakyThrows
   public static String toJson(Map<String, Object> map) {
-    return OBJECT_MAPPER
-        .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
-        .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
-        .writeValueAsString(map);
+    return OBJECT_MAPPER.writeValueAsString(getLinkedHashMap(map));
   }
 
   @SneakyThrows
   public static String toPrettyJson(Map<String, Object> map) {
-    return OBJECT_MAPPER
-        .enable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
-        .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
-        .writerWithDefaultPrettyPrinter()
-        .writeValueAsString(map);
+    return OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(getLinkedHashMap(map));
   }
 
   @SneakyThrows
@@ -78,5 +104,26 @@ public final class SerializeUtil {
       return List.of((String) object);
     }
     throw new IllegalArgumentException("Unsupported type: " + object.getClass());
+  }
+
+  private static Map<String, Object> getLinkedHashMap(Map<String, Object> map) {
+    // convert Map to LinkedHashMap to preserve property order
+    Class<? extends Map> aClass = map.getClass();
+    if (ORDER_MAP_LIST.containsKey(aClass)) {
+      Map<String, Object> linkedHashMap = new LinkedHashMap<>(map.size());
+      ORDER_MAP_LIST
+          .get(aClass)
+          .forEach(
+              string -> {
+                if (map.containsKey(string)) {
+                  linkedHashMap.put(string, map.get(string));
+                }
+              });
+      // add other keys
+      map.forEach(linkedHashMap::putIfAbsent);
+      return linkedHashMap;
+    } else {
+      return map;
+    }
   }
 }
