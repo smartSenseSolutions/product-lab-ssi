@@ -57,3 +57,8 @@ Support for multiple resolvers is achieved by a resolver that applies the [Compo
 * DidResolverException - Exception class to be thrown when a DID cannot be resolved.
 * DidWebResolver / DidUniResolverAdapter - Examples of implementations of the *DidResolver* interface.
 * CompositeDidResolver - *DidResolver* implementation that is able to chain multiple resolvers. It may execute the *resolve* method of each provided resolver until a  DID document is returned.
+
+#### 2.3 Sequence Diagrams
+The following diagram illustrates how multiple *DidResolver* implementations can be orchestrated to a chain that is capable of resolving DID of different types or anchored in different registries (VDRs):
+
+![DidResolutionFlow.png](images/DidResolutionFlow.png)

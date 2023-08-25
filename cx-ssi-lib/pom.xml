@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ /********************************************************************************
-  ~  * Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
-  ~  *
-  ~  * See the NOTICE file(s) distributed with this work for additional
-  ~  * information regarding copyright ownership.
-  ~  *
-  ~  * This program and the accompanying materials are made available under the
-  ~  * terms of the Apache License, Version 2.0 which is available at
-  ~  * https://www.apache.org/licenses/LICENSE-2.0.
-  ~  *
-  ~  * Unless required by applicable law or agreed to in writing, software
-  ~  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-  ~  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-  ~  * License for the specific language governing permissions and limitations
-  ~  * under the License.
-  ~  *
-  ~  * SPDX-License-Identifier: Apache-2.0
-  ~  ********************************************************************************/
-  -->
+Copyright (c) 2021,2023 Contributors to the Eclipse Foundation
+
+See the NOTICE file(s) distributed with this work for additional
+information regarding copyright ownership.
+
+This program and the accompanying materials are made available under the
+terms of the Apache License, Version 2.0 which is available at
+https://www.apache.org/licenses/LICENSE-2.0.
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations
+under the License.
+
+SPDX-License-Identifier: Apache-2.0
+ -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.eclipse.tractusx.ssi</groupId>
     <version>0.0.15</version>
@@ -40,7 +38,7 @@
         <org.eclipse.dash.license.tool.plugin.version>0.0.1-SNAPSHOT</org.eclipse.dash.license.tool.plugin.version>
     </properties>
 
-    <dependencies>
+	<dependencies>
 
         <!-- Project -->
         <dependency>
@@ -63,11 +61,10 @@
             <artifactId>bcprov-jdk15on</artifactId>
             <version>1.70</version>
         </dependency>
-
         <dependency>
             <groupId>com.nimbusds</groupId>
-            <artifactId>nimbus-jose-jwt</artifactId>
-            <version>9.31</version>
+             <artifactId>nimbus-jose-jwt</artifactId>
+             <version>9.31</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.apicatalog/titanium-json-ld -->
@@ -84,7 +81,7 @@
             <version>1.2</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api -->
+      <!-- https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api -->
         <dependency>
             <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-api</artifactId>
@@ -98,6 +95,7 @@
             <version>1.1.3</version>
         </dependency>
 
+       
 
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml -->
         <dependency>
@@ -122,101 +120,157 @@
         </dependency>
 
 
-        <!-- Google Tink -->
-        <!-- Note: that for EdDSA you need to include the optional Tink dependency in your project. For Nimbus JOSE+JWT 6.0 that would be -->
-        <dependency>
-            <groupId>com.google.crypto.tink</groupId>
-            <artifactId>tink</artifactId>
-            <version>1.9.0</version>
-        </dependency>
-        <!-- Net Crypto EDDSA -->
-        <!-- Required for the EDSA Security Provider -->
-        <dependency>
-            <groupId>net.i2p.crypto</groupId>
-            <artifactId>eddsa</artifactId>
-            <version>0.3.0</version>
-        </dependency>
+		<!-- Google Tink -->
+		<!-- Note: that for EdDSA you need to include the optional Tink
+		dependency in your project. For Nimbus JOSE+JWT 6.0 that would be -->
+		<dependency>
+			<groupId>com.google.crypto.tink</groupId>
+			<artifactId>tink</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+		<!-- Net Crypto EDDSA -->
+		<!-- Required for the EDSA Security Provider -->
+		<dependency>
+			<groupId>net.i2p.crypto</groupId>
+			<artifactId>eddsa</artifactId>
+			<version>0.3.0</version>
+		</dependency>
 
-        <!-- JUnit -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.9.3</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.3</version>
-            <scope>test</scope>
-        </dependency>
+		<!-- JUnit -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.9.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.9.3</version>
+			<scope>test</scope>
+		</dependency>
 
-        <!-- Mockito -->
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>5.3.1</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
+		<!-- Mockito -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>5.4.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>5.4.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/org.testcontainers/testcontainers -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers</artifactId>
+			<version>1.18.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>1.18.3</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>nginx</artifactId>
+			<version>1.18.3</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.eclipse.dash</groupId>
-                <artifactId>license-tool-plugin</artifactId>
-                <configuration>
-                    <summary>DEPENDENCIES</summary>
-                </configuration>
-            </plugin>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.dash</groupId>
+				<artifactId>license-tool-plugin</artifactId>
+				<version>1.0.2</version>
+				<executions>
+					<execution>
+						<id>license-check</id>
+						<goals>
+							<goal>license-check</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<summary>DEPENDENCIES</summary>
+				</configuration>
+			</plugin>
 
-            <plugin>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok-maven-plugin</artifactId>
-                <version>1.18.20.0</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>delombok</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <sourceDirectory>${originalSourceDirectory}</sourceDirectory>
-                    <outputDirectory>${delombokSourceDirectory}</outputDirectory>
-                    <addOutputDirectory>false</addOutputDirectory>
-                    <encoding>UTF-8</encoding>
-                    <formatPreferences>
-                        <javaLangAsFQN>skip</javaLangAsFQN>
-                    </formatPreferences>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <version>${com.diffplug.spotless.maven.plugin.version}</version>
-                <configuration>
-                    <java>
-                        <googleJavaFormat>
-                            <version>1.15.0</version>
-                            <style>GOOGLE</style>
-                        </googleJavaFormat>
-                    </java>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>spotless-check</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-        </plugins>
-    </build>
+			<plugin>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok-maven-plugin</artifactId>
+				<version>1.18.20.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>delombok</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<sourceDirectory>${originalSourceDirectory}</sourceDirectory>
+					<outputDirectory>${delombokSourceDirectory}</outputDirectory>
+					<addOutputDirectory>false</addOutputDirectory>
+					<encoding>UTF-8</encoding>
+					<formatPreferences>
+						<javaLangAsFQN>skip</javaLangAsFQN>
+					</formatPreferences>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${com.diffplug.spotless.maven.plugin.version}</version>
+				<configuration>
+					<java>
+						<googleJavaFormat>
+							<version>1.15.0</version>
+							<style>GOOGLE</style>
+						</googleJavaFormat>
+					</java>
+				</configuration>
+				<executions>
+					<execution>
+						<id>spotless-check</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>3.1.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.1.2</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
     <profiles>
         <profile>
@@ -228,7 +282,7 @@
     </profiles>
 
     <repositories>
-        <repository>
+       <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
@@ -259,7 +313,7 @@
         <!-- Eclipse Dash Tool to generate DEPENDENCIES file -->
         <pluginRepository>
             <id>dash-licenses-snapshots</id>
-            <url>https://repo.eclipse.org/content/repositories/dash-licenses-snapshots/</url>
+            <url>https://repo.eclipse.org/content/repositories/dash-licenses-releases/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
