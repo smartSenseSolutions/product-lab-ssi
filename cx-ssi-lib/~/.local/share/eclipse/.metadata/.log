@@ -1,0 +1,599 @@
+!SESSION 2023-08-04 11:14:45.802 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=17.0.8
+java.vendor=Homebrew
+BootLoader constants: OS=macosx, ARCH=aarch64, WS=cocoa, NL=en_DE
+Command-line arguments:  -data ~/.local/share/eclipse/
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:46.786
+!MESSAGE class org.eclipse.jdt.ls.core.internal.JavaLanguageServerPlugin is started
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:46.951
+!MESSAGE Main thread is waiting
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:46.969
+!MESSAGE >> initialize
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:46.970
+!MESSAGE Initializing Java Language Server 1.25.0.202306291518
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:46.986
+!MESSAGE Static Commands: []
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:46.986
+!MESSAGE Non-Static Commands: [java.edit.organizeImports, java.project.refreshDiagnostics, java.project.import, java.navigate.openTypeHierarchy, java.project.removeFromSourcePath, java.project.listSourcePaths, java.project.resolveStackTraceLocation, java.project.getAll, java.reloadBundles, java.project.isTestFile, java.edit.handlePasteEvent, java.project.getClasspaths, java.navigate.resolveTypeHierarchy, java.edit.stringFormatting, java.project.getSettings, java.project.updateSourceAttachment, java.project.resolveWorkspaceSymbol, java.project.upgradeGradle, java.decompile, java.project.createModuleInfo, java.protobuf.generateSources, java.project.resolveSourceAttachment, java.project.addToSourcePath, java.completion.onDidSelect]
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:46.988
+!MESSAGE Started org.eclipse.m2e.core 0ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:47.340
+!MESSAGE ProjectRegistryRefreshJob finished 351ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:47.350
+!MESSAGE Started org.eclipse.buildship.core 10ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:47.359
+!MESSAGE >> initialized
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:47.367
+!MESSAGE RepositoryRegistryUpdateJob finished 13ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:47.375
+!MESSAGE Creating the Java project jdt.ls-java-project
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:47.405
+!MESSAGE Finished creating the Java project jdt.ls-java-project
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:47.755
+!MESSAGE Importing Gradle project(s)
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:47.755
+!MESSAGE No previous Gradle project at /Users/ala4be/work/catena-x/product-lab-ssi/cx-ssi-agent-client-okhttp3/target/generated-sources/openapi, it must be synchronized
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:14:59.953
+!MESSAGE No previous Gradle project at /Users/ala4be/work/catena-x/product-lab-ssi/cx-ssi-agent-client-apache/target/generated-sources/openapi, it must be synchronized
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:03.707
+!MESSAGE Importing Maven project(s)
+
+!ENTRY org.eclipse.jdt.ls.core 4 0 2023-08-04 11:15:03.768
+!MESSAGE Initialization failed 
+!STACK 1
+org.eclipse.core.runtime.CoreException: Failed to import projects
+	at org.eclipse.jdt.ls.core.internal.managers.ProjectsManager.importProjects(ProjectsManager.java:162)
+	at org.eclipse.jdt.ls.core.internal.managers.ProjectsManager.initializeProjects(ProjectsManager.java:112)
+	at org.eclipse.jdt.ls.core.internal.handlers.InitHandler$1.runInWorkspace(InitHandler.java:254)
+	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:43)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Contains: Invalid project description.
+Contains: OK
+Contains: /Users/ala4be/work/catena-x/product-lab-ssi overlaps the workspace location: /Users/ala4be/work/catena-x/product-lab-ssi/cx-ssi-lib/~/.local/share/eclipse
+!SUBENTRY 1 org.eclipse.jdt.ls.core 4 -1 2023-08-04 11:15:03.768
+!MESSAGE Failed to import projects
+!SUBENTRY 2 org.eclipse.core.resources 4 77 2023-08-04 11:15:03.768
+!MESSAGE Invalid project description.
+!SUBENTRY 3 unknown 0 0 2023-08-04 11:15:03.768
+!MESSAGE OK
+!SUBENTRY 3 org.eclipse.core.resources 4 77 2023-08-04 11:15:03.768
+!MESSAGE /Users/ala4be/work/catena-x/product-lab-ssi overlaps the workspace location: /Users/ala4be/work/catena-x/product-lab-ssi/cx-ssi-lib/~/.local/share/eclipse
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:03.783
+!MESSAGE >> initialization job finished
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:03.785
+!MESSAGE >> registerWatchers'
+
+!ENTRY org.eclipse.jdt.ls.core 4 0 2023-08-04 11:15:03.985
+!MESSAGE org.eclipse.lsp4j.jsonrpc.ResponseErrorException: Method not found: workspace/executeClientCommand
+!STACK 0
+java.util.concurrent.CompletionException: org.eclipse.lsp4j.jsonrpc.ResponseErrorException: Method not found: workspace/executeClientCommand
+	at java.base/java.util.concurrent.CompletableFuture.reportJoin(CompletableFuture.java:413)
+	at java.base/java.util.concurrent.CompletableFuture.join(CompletableFuture.java:2118)
+	at org.eclipse.jdt.ls.core.internal.JavaClientConnection.executeClientCommand(JavaClientConnection.java:93)
+	at org.eclipse.jdt.ls.core.internal.handlers.JDTLanguageServer.synchronizeBundles(JDTLanguageServer.java:426)
+	at org.eclipse.jdt.ls.core.internal.handlers.JDTLanguageServer$2.run(JDTLanguageServer.java:310)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: org.eclipse.lsp4j.jsonrpc.ResponseErrorException: Method not found: workspace/executeClientCommand
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.handleResponse(RemoteEndpoint.java:209)
+	at org.eclipse.lsp4j.jsonrpc.RemoteEndpoint.consume(RemoteEndpoint.java:193)
+	at org.eclipse.jdt.ls.core.internal.ParentProcessWatcher.lambda$1(ParentProcessWatcher.java:144)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.handleMessage(StreamMessageProducer.java:194)
+	at org.eclipse.lsp4j.jsonrpc.json.StreamMessageProducer.listen(StreamMessageProducer.java:94)
+	at org.eclipse.lsp4j.jsonrpc.json.ConcurrentMessageProcessor.run(ConcurrentMessageProcessor.java:113)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:04.016
+!MESSAGE >> build jobs finished
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:04.259
+!MESSAGE Reconciled 1. Took 0 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:04.879
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:04.879
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:04.880
+!MESSAGE Validated 1. Took 18 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:14.736
+!MESSAGE Reconciled 1. Took 0 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:15.160
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:15.161
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:15.190
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:15.190
+!MESSAGE 1 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:15.190
+!MESSAGE Validated 2. Took 50 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:30.393
+!MESSAGE Reconciled 1. Took 17 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:30.816
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:30.816
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:30.857
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:30.858
+!MESSAGE 3 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:30.858
+!MESSAGE Validated 2. Took 59 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:30.951
+!MESSAGE Reconciled 1. Took 2 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:31.365
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:31.365
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:31.378
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:31.378
+!MESSAGE 1 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:31.379
+!MESSAGE Validated 2. Took 23 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:33.105
+!MESSAGE Reconciled 1. Took 3 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:33.524
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:33.524
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:33.542
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:33.542
+!MESSAGE 1 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:33.542
+!MESSAGE Validated 2. Took 32 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:34.810
+!MESSAGE Reconciled 1. Took 3 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:35.227
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:35.228
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:35.239
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:35.240
+!MESSAGE 1 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:35.240
+!MESSAGE Validated 2. Took 21 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:35.399
+!MESSAGE Reconciled 1. Took 1 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:35.815
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:35.816
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:35.832
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:35.833
+!MESSAGE 1 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:35.833
+!MESSAGE Validated 2. Took 28 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:36.038
+!MESSAGE Reconciled 1. Took 0 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:36.460
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:36.461
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:36.475
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:36.475
+!MESSAGE 1 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:36.475
+!MESSAGE Validated 2. Took 32 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:37.230
+!MESSAGE Reconciled 1. Took 1 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:37.648
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:37.648
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:37.661
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:37.661
+!MESSAGE 1 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:37.662
+!MESSAGE Validated 2. Took 26 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:37.805
+!MESSAGE Reconciled 1. Took 2 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:38.218
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:38.218
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:38.234
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:38.234
+!MESSAGE 3 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:38.234
+!MESSAGE Validated 2. Took 24 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:38.440
+!MESSAGE Reconciled 1. Took 1 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:38.853
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:38.855
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:38.867
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:38.867
+!MESSAGE 1 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:38.868
+!MESSAGE Validated 2. Took 22 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:39.132
+!MESSAGE Reconciled 1. Took 1 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:39.545
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:39.546
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:39.554
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:39.554
+!MESSAGE 1 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:39.556
+!MESSAGE Validated 2. Took 23 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:39.833
+!MESSAGE Reconciled 1. Took 4 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:39.942
+!MESSAGE Completion request completed
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.244
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.245
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.254
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.254
+!MESSAGE 1 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.254
+!MESSAGE Validated 2. Took 16 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.313
+!MESSAGE Reconciled 1. Took 2 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.528
+!MESSAGE Reconciled 1. Took 1 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.944
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.945
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.956
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.957
+!MESSAGE 1 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.957
+!MESSAGE Validated 2. Took 26 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:40.981
+!MESSAGE Reconciled 1. Took 2 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:41.096
+!MESSAGE Reconciled 1. Took 1 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:41.351
+!MESSAGE Reconciled 1. Took 1 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:41.420
+!MESSAGE Reconciled 1. Took 1 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:41.637
+!MESSAGE Reconciled 1. Took 2 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:41.804
+!MESSAGE Reconciled 1. Took 1 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:41.817
+!MESSAGE Completion request completed
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:42.213
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:42.213
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:42.223
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:42.224
+!MESSAGE Duplicate modifier for the variable multibaseString is of type DuplicateModifierForVariable
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:42.224
+!MESSAGE 2 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:42.224
+!MESSAGE Validated 2. Took 15 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:43.204
+!MESSAGE Reconciled 1. Took 3 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:43.620
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:43.621
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:43.638
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:43.643
+!MESSAGE 3 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:43.644
+!MESSAGE Validated 2. Took 36 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:44.753
+!MESSAGE Reconciled 1. Took 2 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:45.164
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:45.165
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:45.178
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:45.179
+!MESSAGE 3 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:45.179
+!MESSAGE Validated 2. Took 21 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:45.898
+!MESSAGE Reconciled 1. Took 3 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:46.308
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:46.308
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:46.325
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:46.325
+!MESSAGE 4 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:46.327
+!MESSAGE Validated 2. Took 24 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:48.271
+!MESSAGE Reconciled 1. Took 5 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:48.458
+!MESSAGE Reconciled 1. Took 2 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:48.603
+!MESSAGE Reconciled 1. Took 1 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.019
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.019
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.032
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.033
+!MESSAGE Duplicate local variable verificationMethodId is of type RedefinedLocal
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.033
+!MESSAGE Duplicate local variable privateKey is of type RedefinedLocal
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.033
+!MESSAGE 5 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.034
+!MESSAGE Validated 2. Took 26 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.135
+!MESSAGE Reconciled 1. Took 1 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.549
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.549
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.561
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.561
+!MESSAGE Duplicate local variable verificationMethodId is of type RedefinedLocal
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.561
+!MESSAGE Duplicate local variable privateKey is of type RedefinedLocal
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.562
+!MESSAGE 5 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:49.562
+!MESSAGE Validated 2. Took 21 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:50.327
+!MESSAGE Reconciled 1. Took 2 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:50.634
+!MESSAGE Reconciled 1. Took 3 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:51.042
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:51.042
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:51.053
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:51.053
+!MESSAGE Duplicate local variable verificationMethodId is of type RedefinedLocal
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:51.053
+!MESSAGE Duplicate local variable privateKey is of type RedefinedLocal
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:51.053
+!MESSAGE 5 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:51.054
+!MESSAGE Validated 2. Took 16 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:51.061
+!MESSAGE Completion request completed
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:52.161
+!MESSAGE Reconciled 1. Took 3 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:52.426
+!MESSAGE Reconciled 1. Took 5 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:52.839
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:52.839
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:52.852
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:52.852
+!MESSAGE Duplicate local variable verificationMethodId is of type RedefinedLocal
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:52.858
+!MESSAGE Duplicate local variable privateKey is of type RedefinedLocal
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:52.858
+!MESSAGE 5 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:52.858
+!MESSAGE Validated 2. Took 29 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:54.845
+!MESSAGE Reconciled 1. Took 4 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:55.126
+!MESSAGE Reconciled 1. Took 2 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:55.538
+!MESSAGE begin problem for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:55.539
+!MESSAGE 1 problems reported for /ISigner.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:55.550
+!MESSAGE begin problem for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:55.551
+!MESSAGE Duplicate local variable verificationMethodId is of type RedefinedLocal
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:55.551
+!MESSAGE Duplicate local variable privateKey is of type RedefinedLocal
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:55.551
+!MESSAGE 5 problems reported for /LinkedDataProofGenerator.java
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:15:55.551
+!MESSAGE Validated 2. Took 24 ms
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:16:03.266
+!MESSAGE >> shutdown
+
+!ENTRY org.eclipse.jdt.ls.core 1 0 2023-08-04 11:16:03.268
+!MESSAGE >> exit
