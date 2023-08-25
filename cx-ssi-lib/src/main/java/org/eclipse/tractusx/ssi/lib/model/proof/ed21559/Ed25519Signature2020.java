@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Objects;
 import org.eclipse.tractusx.ssi.lib.model.MultibaseString;
 import org.eclipse.tractusx.ssi.lib.model.base.MultibaseFactory;
+import org.eclipse.tractusx.ssi.lib.model.proof.Proof;
 import org.eclipse.tractusx.ssi.lib.serialization.SerializeUtil;
 
 /**
