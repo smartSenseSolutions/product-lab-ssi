@@ -63,6 +63,16 @@ public class VerifiableCredential extends JsonLdObject {
 
   public static final String CREDENTIAL_STATUS = "credentialStatus";
 
+  public static final String CREDENTIAL_SCHEMA = "credentialSchema";
+
+  public static final String REFERENCE_NUMBER = "referenceNumber";
+
+  public static final String EVIDENCE = "evidence";
+
+  public static final String TERMS_OF_USE = "termsOfUse";
+
+  public static final String REFRESH_SERVICE = "refreshService";
+
   @JsonCreator
   public VerifiableCredential(Map<String, Object> json) {
     super(json);
