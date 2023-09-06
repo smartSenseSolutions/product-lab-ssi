@@ -23,6 +23,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.eclipse.tractusx.ssi.lib.did.resolver.DidResolver;
+import org.eclipse.tractusx.ssi.lib.exception.UnsupportedSignatureTypeException;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.Verifiable;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.credential.VerifiableCredential;
 import org.eclipse.tractusx.ssi.lib.model.verifiable.presentation.VerifiablePresentation;
@@ -58,10 +59,18 @@ public class LinkedDataProofValidation {
   @SneakyThrows
   public boolean verifiy(Verifiable verifiable) {
 
-    IVerifier verifier =
-        verifiable.getProof().getType() == SignatureType.ED21559.toString()
-            ? new Ed25519ProofVerifier(this.didResolver)
-            : new JWSProofVerifier(this.didResolver);
+    var type = verifiable.getProof().getType();
+    IVerifier verifier = null;
+
+    if (!type.isBlank()) {
+      if (type.equals(SignatureType.ED21559.toString()))
+        verifier = new Ed25519ProofVerifier(this.didResolver);
+      else if (type.equals(SignatureType.JWS.toString()))
+        verifier = new JWSProofVerifier(this.didResolver);
+      else
+        throw new UnsupportedSignatureTypeException(
+            String.format("%s is not suppourted type", type));
+    }
 
     final TransformedLinkedData transformedData = transformer.transform(verifiable);
     final HashedLinkedData hashedData = hasher.hash(transformedData);
