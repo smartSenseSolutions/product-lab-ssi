@@ -70,8 +70,8 @@ public class LinkedDataProofValidation {
       else
         throw new UnsupportedSignatureTypeException(
             String.format("%s is not suppourted type", type));
-    }else{
-       throw new UnsupportedSignatureTypeException("Proof type can't be empty");
+    } else {
+      throw new UnsupportedSignatureTypeException("Proof type can't be empty");
     }
 
     final TransformedLinkedData transformedData = transformer.transform(verifiable);
