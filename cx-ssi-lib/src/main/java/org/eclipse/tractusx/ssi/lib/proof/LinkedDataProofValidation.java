@@ -62,7 +62,7 @@ public class LinkedDataProofValidation {
     var type = verifiable.getProof().getType();
     IVerifier verifier = null;
 
-    if (!type.isBlank()) {
+    if (type != null && !type.isBlank()) {
       if (type.equals(SignatureType.ED21559.toString()))
         verifier = new Ed25519ProofVerifier(this.didResolver);
       else if (type.equals(SignatureType.JWS.toString()))
@@ -70,6 +70,8 @@ public class LinkedDataProofValidation {
       else
         throw new UnsupportedSignatureTypeException(
             String.format("%s is not suppourted type", type));
+    }else{
+       throw new UnsupportedSignatureTypeException("Proof type can't be empty");
     }
 
     final TransformedLinkedData transformedData = transformer.transform(verifiable);
